@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>generate-logo scene</title>
+<style>
+  html, body { margin: 0; background: #888; }
+  canvas { display: block; width: 100vw; height: auto; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1920" height="1080"></canvas>
+<script type="module">
+// Loads /config.json + the logo, runs the chosen style, and exposes render(t, transparent) for render.mjs.
+// Open with #play (through render.mjs's server) to watch it loop.
+import { boot } from './engine.mjs';
+boot().catch(e => { window.bootError = String(e && e.stack || e); console.error(e); });
+</script>
+</body>
+</html>
