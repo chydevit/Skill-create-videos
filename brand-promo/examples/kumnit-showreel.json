@@ -1,0 +1,40 @@
+{
+  "name": "kumnit-showreel",
+  "lang": "en",
+  "brand": {
+    "name": ["KumNit", " Studio"],
+    "colors": ["#1f6bff", "#2fb4ff", "#fe8a05", "#ffb21a"],
+    "accent": "#0a84ff", "accent2": "#01d4f7", "warm": "#fe9a01",
+    "logoAnimation": "/Users/oldman/poster/k-logo-animation/k-logo-liquid-5s-alpha-1080p60.mov",
+    "url": "kumnitstudio.com"
+  },
+  "text": {
+    "typed": "Every story", "line": ["deserves to ", "move."],
+    "ring": ["Here are five of ", "ours."],
+    "eyebrow": "SHOWREEL", "subline": "Animation and AI video, made in Khmer",
+    "next": ["Your story", "next."],
+    "rush": ["Written", "Voiced", "Animated"], "rushLine": "all by our own team",
+    "chips": ["Folk tales", "Explainers", "Legends", "AI video"]
+  },
+  "works": [
+    {"video": "/Users/oldman/poster/ex1.mp4", "sound": 79.71, "label": "FOLK TALE · 9:16", "title": "Folk tales", "line": "for the phone in your hand."},
+    {"video": "/Users/oldman/poster/ex2.mp4", "sound": 184.5, "label": "EXPLAINER · 16:9", "title": "Explainers", "line": "big ideas, made simple."},
+    {"video": "/Users/oldman/poster/ex3.mp4", "sound": 130.08, "label": "LEGEND · 16:9", "title": "Legends", "line": "history, brought back to life."},
+    {"video": "/Users/oldman/poster/ex4.mp4", "sound": 22.61, "label": "AI EXPLAINER · 16:9", "title": "AI stories", "line": "cinematic, made with AI."},
+    {"video": "/Users/oldman/poster/ex5.mp4", "sound": 4.5, "label": "AWARENESS · 16:9", "title": "Awareness", "line": "keeping people safe."}
+  ],
+  "voice": {
+    "design": "A warm, confident young woman with a clear, bright and friendly voice, narrating a modern brand video in natural American English, upbeat, smooth and smiling, medium pace",
+    "sample": "Every great story starts with a simple idea, and we love helping it come to life.",
+    "lines": {
+      "intro": "Every story deserves to move.",
+      "ring": "Here are five of ours.",
+      "title": "This is Kumnit Studio.",
+      "works": ["Folk tales, for your phone.", "Explainers, made simple.", "Legends, brought back to life.", "Cinematic stories, made with AI.", "And messages that keep people safe."],
+      "next": "Your story could be next.",
+      "rush": "We write it, voice it, and animate every frame.",
+      "end": "Kumnit Studio. Let's make your story move."
+    }
+  },
+  "sfxDir": "/Users/oldman/Edit VD/1000+ Sound Design Asset/336 SFX/MIX"
+}

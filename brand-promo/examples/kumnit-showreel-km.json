@@ -1,0 +1,109 @@
+{
+  "name": "kumnit-showreel-km",
+  "lang": "km",
+  "brand": {
+    "name": [
+      "KumNit",
+      " Studio"
+    ],
+    "colors": [
+      "#1f6bff",
+      "#2fb4ff",
+      "#fe8a05",
+      "#ffb21a"
+    ],
+    "accent": "#0a84ff",
+    "accent2": "#01d4f7",
+    "warm": "#fe9a01",
+    "logoAnimation": "/Users/oldman/poster/k-logo-animation/k-logo-liquid-5s-alpha-1080p60.mov",
+    "url": "kumnitstudio.com"
+  },
+  "text": {
+    "typed": "រឿងនីមួយៗ",
+    "line": [
+      "សមនឹង",
+      "មានជីវិត។"
+    ],
+    "ring": [
+      "នេះជាស្នាដៃប្រាំ",
+      "របស់យើង។"
+    ],
+    "eyebrow": "ស្នាដៃរបស់យើង",
+    "subline": "គំនូរជីវចល និងវីដេអូ AI ផលិតជាភាសាខ្មែរ",
+    "soundOn": "សំឡេងដើម",
+    "fullVideo": "វីដេអូពេញ · ",
+    "next": [
+      "រឿងរបស់អ្នក",
+      "បន្ទាប់។"
+    ],
+    "rush": [
+      "សរសេរ",
+      "បញ្ចូលសំឡេង",
+      "ធ្វើចលនា"
+    ],
+    "rushLine": "ដោយក្រុមការងាររបស់យើងផ្ទាល់",
+    "chips": [
+      "រឿងនិទាន",
+      "វីដេអូពន្យល់",
+      "រឿងព្រេង",
+      "វីដេអូ AI"
+    ]
+  },
+  "works": [
+    {
+      "video": "/Users/oldman/poster/ex1.mp4",
+      "sound": 79.71,
+      "label": "រឿងនិទាន · 9:16",
+      "title": "រឿងនិទាន",
+      "line": "សម្រាប់ទូរស័ព្ទក្នុងដៃអ្នក។"
+    },
+    {
+      "video": "/Users/oldman/poster/ex2.mp4",
+      "sound": 184.5,
+      "label": "វីដេអូពន្យល់ · 16:9",
+      "title": "វីដេអូពន្យល់",
+      "line": "រឿងធំៗ ធ្វើឱ្យងាយយល់។"
+    },
+    {
+      "video": "/Users/oldman/poster/ex3.mp4",
+      "sound": 130.08,
+      "label": "រឿងព្រេង · 16:9",
+      "title": "រឿងព្រេង",
+      "line": "មានជីវិតឡើងវិញ។"
+    },
+    {
+      "video": "/Users/oldman/poster/ex4.mp4",
+      "sound": 22.61,
+      "label": "វីដេអូពន្យល់ AI · 16:9",
+      "title": "រឿង AI",
+      "line": "ស្អាតៗ បង្កើតដោយ AI។"
+    },
+    {
+      "video": "/Users/oldman/poster/ex5.mp4",
+      "sound": 4.5,
+      "label": "វីដេអូអប់រំ · 16:9",
+      "title": "វីដេអូអប់រំ",
+      "line": "ជួយការពារមនុស្ស។"
+    }
+  ],
+  "voice": {
+    "design": "A warm, confident young Cambodian woman narrating a modern brand video in natural Khmer, clear bright friendly voice, upbeat and smooth, medium pace",
+    "sample": "រឿងល្អៗ ចាប់ផ្តើមពីគំនិតតូចមួយ ហើយយើងចូលចិត្តជួយឱ្យវាមានជីវិត។",
+    "lines": {
+      "intro": "រឿងនីមួយៗ សមនឹងមានជីវិត។",
+      "ring": "នេះជាស្នាដៃប្រាំរបស់យើង។",
+      "title": "នេះគឺ គំនិត ស្ទូឌីយោ។",
+      "works": [
+        "រឿងនិទាន សម្រាប់ទូរស័ព្ទរបស់អ្នក។",
+        "វីដេអូពន្យល់ ងាយយល់។",
+        "រឿងព្រេង ដែលមានជីវិតឡើងវិញ។",
+        "រឿងស្អាតៗ បង្កើតដោយអេអាយ។",
+        "និងសារដែលជួយការពារមនុស្ស។"
+      ],
+      "next": "រឿងរបស់អ្នក អាចជារឿងបន្ទាប់។",
+      "rush": "យើងសរសេរ បញ្ចូលសំឡេង និងធ្វើចលនាគ្រប់ស៊ុម។",
+      "end": "គំនិត ស្ទូឌីយោ។ ឱ្យរឿងរបស់អ្នកមានចលនា។"
+    }
+  },
+  "sfxDir": "/Users/oldman/Edit VD/1000+ Sound Design Asset/336 SFX/MIX"
+}
