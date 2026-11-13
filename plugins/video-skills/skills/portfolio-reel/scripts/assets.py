@@ -7,6 +7,8 @@ python assets.py <project>/promo.json
 - logo (optional): the picture inside the profile card's circle; the avatar is used when it is missing.
 - sections[].clips[]: each an image or a video ({"file": ..., "at": seconds}). A video becomes 30 fps JPEG frames for
   "seconds" s (default 5.5) from "at" (default 25 % into it), scaled so the long side is 720 px; an image is one JPEG.
+- profile.qr (or a profile.back that looks like a web address): a QR code for the app UI's card back, made with the
+  `qrencode` tool when it is installed (brew install qrencode).
 Paths are relative to the project folder.
 """
 import json, os, shutil, subprocess, sys
@@ -85,6 +87,16 @@ for k, sec in enumerate(CFG.get('sections', [])):
             w, h, _ = probe(f'{A}/clips/{cid}.jpg')
             clips.append({'id': cid, 'kind': 'image', 'src': f'clips/{cid}.jpg', 'w': w, 'h': h, 'from': os.path.basename(src)})
     man['sections'].append({'title': sec.get('title', ''), 'clips': clips})
+
+# ---------------------------------------------------------------- a QR code of the profile link (the app UI's card back)
+prof = CFG.get('profile', {})
+link = prof.get('qr') or (prof.get('back') if ('.' in str(prof.get('back', '')) and ' ' not in str(prof.get('back', ''))) else None)
+if link and shutil.which('qrencode'):
+    url = link if '://' in link else 'https://' + link.lstrip('@')
+    r = subprocess.run(['qrencode', '-o', f'{A}/qr.png', '-s', '12', '-m', '2', '-l', 'M', url], capture_output=True, text=True)
+    if r.returncode == 0:
+        man['qr'] = 'qr.png'
+        print(f'qr code -> {url}')
 
 json.dump(man, open(f'{A}/manifest.json', 'w'), indent=1)
 n_clips = sum(len(s['clips']) for s in man['sections'])

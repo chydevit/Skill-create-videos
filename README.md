@@ -1,21 +1,50 @@
-# logo-gp: brand motion skills for Claude Code
+# Skill-create-videos: logo and video skills for Claude Code
 
-Five [Claude Code](https://claude.com/claude-code) skills that turn a brand's logo and its own work into finished videos, ready to post. Everything is drawn in code and rendered on your own machine. There is no stock footage, no template service and no AI video generator.
+Five [Claude Code](https://claude.com/claude-code) skills that turn your logo, screenshots and clips into finished videos, ready to post. Everything is drawn in code and rendered on your own computer. There is no stock footage, no template service and no AI video generator. English or Khmer.
 
-| Type this | You get |
-|---|---|
-| **`/generate-logo`** | 5-second animated **logo reveals** in 5 styles from any logo image, with sound and transparent versions |
-| **`/brand-promo`** | a ~50-second dark, kinetic **studio showreel** of your work, with an original score, narration (English or Khmer) and each work's own sound |
-| **`/brand-loop`** | a seamless 4K 60 fps **looping background** of glossy liquid blobs in your brand colours |
-| **`/saas-promo`** | an ~11-second kinetic **SaaS / product promo** of your screenshots (a typed word in a 3D card swirl, a bento wall on a meadow, an orb headline and a "From … / To …" finale), or a ~50-second version with one chapter per project, cut on the beat of your own song |
-| **`/portfolio-reel`** | a ~30-second **creator / developer intro reel**: a hook question, an "Hello, I'm …" profile hero, work sections playing your clips, and a social profile card that gets a Follow click and flips |
+| | Type this | You get |
+|---|---|---|
+| 🎬 video | **`/portfolio-reel`** | a ~30 s **creator / developer intro reel** in 2 UIs and 5 colour styles: hook question, profile, your work playing in cards or device mockups, a profile card with a Follow click |
+| 🎬 video | **`/saas-promo`** | an ~11 s kinetic **SaaS / product promo** of your screenshots, or a ~50 s version with one chapter per project, **cut on the beat of your song** |
+| 🎬 video | **`/brand-promo`** | a ~50 s **studio showreel** of your videos, with an original score and narration |
+| 🎬 video | **`/brand-loop`** | a seamless 4K 60 fps **looping background** of glossy liquid blobs in your colours |
+| ✨ logo | **`/generate-logo`** | 5-second animated **logo reveals** in 5 styles, with sound and transparent versions |
 
-## Examples
+## Demos
 
-### `/generate-logo`: logo reveals
-| liquid style (the KumNit K) | a bespoke style set made for one logo (PharmKulen) |
-|---|---|
-| ![liquid logo reveal](docs/generate-logo-liquid.gif) | ![four styles](docs/generate-logo-styles.gif) |
+### `/portfolio-reel`: creator / developer intro reel
+
+**App UI** (`"ui": "app"`): a search bar types the hook, the result opens a bento dashboard, the work slides past in browser and phone mockups, the closing lines arrive as chat messages, and the profile card flips to a QR code.
+
+![portfolio-reel, app UI: search, bento dashboard, device carousel](docs/portfolio-reel-app.gif)
+
+![portfolio-reel, app UI: chat, profile card, QR code](docs/portfolio-reel-app-end.gif)
+
+▶ [Watch the whole app-UI reel with sound (35 s MP4)](docs/videos/portfolio-reel-app.mp4)
+
+The same reel in all 5 styles (`"style"`: midnight, amber, sunset, mint, mustard):
+
+![portfolio-reel, app UI in 5 styles](docs/portfolio-reel-app-styles.jpg)
+
+**Classic UI** (the default, after the template): a hook question on a gradient, a white profile page, scrolling work sections and a black profile card.
+
+![portfolio-reel, classic UI](docs/portfolio-reel.gif)
+
+▶ [Watch the classic reel in the amber style (30 s MP4)](docs/videos/portfolio-reel-classic.mp4)
+
+![portfolio-reel, classic UI in 5 styles](docs/portfolio-reel-classic-styles.jpg)
+
+### `/saas-promo`: SaaS / product promo
+
+![saas-promo: card swirl, bento wall, orb headline, flower finale](docs/saas-promo.gif)
+
+▶ [Watch the 11 s promo with sound (MP4)](docs/videos/saas-promo.mp4)
+
+**50 s long cut** (`"chapters"`): one chapter per project, every cut on the beat of your song. The GIF has no sound; the demo was cut to a commercial song, which isn't included here.
+
+![saas-promo 50 s long cut](docs/saas-promo-50s.gif)
+
+![saas-promo: two frames per second](docs/saas-promo-contact.jpg)
 
 ### `/brand-promo`: studio showreel
 ![brand-promo: title drop and spotlights](docs/brand-promo.gif)
@@ -25,133 +54,116 @@ Five [Claude Code](https://claude.com/claude-code) skills that turn a brand's lo
 ### `/brand-loop`: seamless liquid background
 ![brand-loop](docs/brand-loop.gif)
 
-### `/saas-promo`: SaaS / product promo
-![saas-promo: card swirl, bento wall, orb headline, flower finale](docs/saas-promo.gif)
-
-![saas-promo: two frames per second](docs/saas-promo-contact.jpg)
-
-### `/portfolio-reel`: creator intro reel
-![portfolio-reel: hook, profile hero, work sections, profile card](docs/portfolio-reel.gif)
-
-![portfolio-reel: the whole reel](docs/portfolio-reel-contact.jpg)
+### `/generate-logo`: logo reveals
+| liquid style | a bespoke style set made for one logo |
+|---|---|
+| ![liquid logo reveal](docs/generate-logo-liquid.gif) | ![four styles](docs/generate-logo-styles.gif) |
 
 ## Install
 
-This repo is private, so your GitHub account needs access.
+This repo is private, so your GitHub account needs access (sign in with `gh auth login` first).
+
+### Option A: as a Claude Code plugin (recommended)
+
+In Claude Code, run:
+
+```
+/plugin marketplace add chydevit/Skill-create-videos
+/plugin install video-skills@chydevit-skills
+/plugin install logo-skills@chydevit-skills
+```
+
+Start a new session. The skills then appear as `/video-skills:portfolio-reel`, `/video-skills:saas-promo`, `/video-skills:brand-promo`, `/video-skills:brand-loop` and `/logo-skills:generate-logo`. To get updates later, run `/plugin marketplace update chydevit-skills`.
+
+### Option B: clone and link
 
 ```bash
-gh repo clone chydevit/logo-gp        # or: git clone https://github.com/chydevit/logo-gp.git
-cd logo-gp
+gh repo clone chydevit/Skill-create-videos
+cd Skill-create-videos
 ./install.sh
 ```
 
-`install.sh` links every skill folder into `~/.claude/skills/`. **Start a new Claude Code session**, type `/`, and `generate-logo`, `brand-promo`, `brand-loop`, `saas-promo` and `portfolio-reel` appear in the list. Because they're links, `git pull` updates them in place.
+`install.sh` links every skill into `~/.claude/skills/`, so the commands are the short ones (`/portfolio-reel`, `/saas-promo`, …). Because they are links, `git pull` updates them in place. Use `./install.sh --copy` to copy instead, or `./install.sh --remove` to uninstall.
 
-| Command | What it does |
-|---|---|
-| `./install.sh` | install (link) |
-| `./install.sh --copy` | install a copy instead of links |
-| `./install.sh --remove` | uninstall |
+Use one option, not both, or each skill shows up twice.
 
-## Use: just type `/` and the skill name
+### Check your tools
+
+```bash
+./doctor.sh
+```
 
 ```
-/generate-logo animate logo.png
-/generate-logo make neon and lens versions of brand/logo.png, square for Instagram
-/generate-logo animate mark.png and add the name "Pharm|Kulen" next to it
+Needed by every skill:
+  ✓ ffmpeg with libx264
+  ✓ Node v22+
+  ✓ Chrome / Chromium
+  ✓ Python with numpy + scipy
+Optional:
+  ✓ qrencode (QR code on the portfolio-reel app card)
+  ✓ Blender (brand-loop)
+  ✓ VoxCPM2 narration (brand-promo)
+```
 
-/brand-promo make a showreel from ex1.mp4 to ex5.mp4 with my logo animation
-/brand-promo the same showreel in Khmer, with a Khmer narrator
+Anything marked ✗ prints the command that installs it.
 
-/brand-loop make a 10 second looping background in the colours of logo.png
-/brand-loop 1080p loop, teal and coral, for our website hero
+## Use: just ask
+
+```
+/portfolio-reel make an intro reel with me.jpg and my three best clips
+/portfolio-reel the same reel with the app UI in the amber style
+/portfolio-reel the same reel in Khmer, ending on my TikTok profile card
 
 /saas-promo make a promo from the screenshots in shots/ with the headline "Ship Your Product Faster"
-/saas-promo the same promo in Khmer, with my logo at the end
 /saas-promo a 50 second version with a chapter for each project, set to song.mp3
 
-/portfolio-reel make an intro reel with me.jpg and my three best clips
-/portfolio-reel the same reel in Khmer, ending on my TikTok profile card
+/brand-promo make a showreel from ex1.mp4 to ex5.mp4 with my logo animation
+/brand-loop make a 10 second looping background in the colours of logo.png
+/generate-logo animate logo.png
 ```
 
-You don't have to type the slash. Asking in plain words ("make a showreel of our work", "animate this logo", "a looping background in our colours") picks the right skill too. Claude looks at your files first, shows you a quick preview, then renders the full video.
+You don't have to type the slash: asking in plain words ("make an intro reel about me", "animate this logo") picks the right skill. Claude looks at your files first, shows you a preview sheet, then renders the full video.
 
 ## What each skill does
 
-### `/generate-logo`
-- **Styles:** liquid, neon, bounce, lens and rise. Every one ends on your logo file's own pixels.
-- **Files:** each style comes as a 1080p60 MP4 with synthesised sound, a transparent WebM (and ProRes 4444 with `--prores`) and a keyframe sheet.
-- **Extras:** square and vertical sizes, a two-tone wordmark (`--text "Pharm|Kulen"`), and bespoke styles for a particular logo.
-- **Docs:** [generate-logo/SKILL.md](generate-logo/SKILL.md).
-
-### `/brand-promo`
-One `promo.json` file describes the whole video:
-- 3-5 of your videos (vertical ones play on a phone).
-- Your logo animation (made with `/generate-logo` liquid).
-- Your name, colours, texts and narration lines.
-
-The video runs in this order:
-1. A typed intro, then a ring of 3D cards.
-2. A glitchy title drop.
-3. A spotlight for each work, playing its own sound with live level bars.
-4. "Your story… next.", then a 3D rush of clips.
-5. The liquid logo reveal, with chips and your website.
-
-The score is synthesised, every cut sits on its beat, and the mix is set to −14 LUFS. Timings are measured from the narration automatically.
-- **Docs:** [brand-promo/SKILL.md](brand-promo/SKILL.md) and [all config keys](brand-promo/references/config.md).
-- **Example config:** [brand-promo/examples/kumnit-showreel.json](brand-promo/examples/kumnit-showreel.json).
-
-### `/brand-loop`
-- **The look:** two colour families of metaball blobs that merge and pinch off like mercury, on a warm off-white studio backdrop with ripple rings, soft shadows and shallow depth of field.
-- **Render:** Blender EEVEE at 4K60.
-- **Loop:** every motion is periodic, so the last frame flows into the first.
-- **Colours:** they can come straight from a logo (`--logo logo.png`).
-- **Docs:** [brand-loop/SKILL.md](brand-loop/SKILL.md).
+### `/portfolio-reel`
+- **What you give it:** one `promo.json` with your photo, a hook question, a greeting, your roles, 1-4 work sections (each 1-3 clips or pictures), two closing lines and your profile card (handle, name, real stats).
+- **Two UIs:** `classic` follows the template; `app` is a search bar, bento dashboard, device carousel, chat and QR card.
+- **Five colour styles and ten effects:** bokeh, light sweeps, a highlighter under your name, an orbiting avatar ring, motion blur, section numbers, card glare, a tag ticker, confetti and film grain.
+- **Sound:** a synthesised lo-fi beat or your own track, a sound on every move, a −14 LUFS mix.
+- **Docs:** [SKILL.md](plugins/video-skills/skills/portfolio-reel/SKILL.md), [all config keys](plugins/video-skills/skills/portfolio-reel/references/config.md).
 
 ### `/saas-promo`
-One `promo.json` file describes the video: 8-20 pictures (screenshots, UI, design work or stills from your videos), a typed word, three short card phrases, a headline with a subline, and a "From … / To …" pair. Built-in UI cards fill in when there are fewer pictures.
+- **The scenes:** glyph flashes, your word typing inside a 3D swirl of your cards, a bento wall on a painted meadow, a glowing orb headline, and a "From … / To …" finale.
+- **Long cut:** add `chapters` for ~50 s. Give it a song and the skill measures its tempo and drop, so the first cut lands on the drop and every cut on a bar.
+- **Docs:** [SKILL.md](plugins/video-skills/skills/saas-promo/SKILL.md), [all config keys](plugins/video-skills/skills/saas-promo/references/config.md).
 
-The video runs in this order:
-1. Glyph flashes and purple and lime neon shapes on a dot-matrix field.
-2. Your word types in while a 3D ring of your cards orbits it.
-3. The cards build a bento wall on a painted meadow, with words typing inside them, and the camera zooms into one card.
-4. A glowing gradient orb reveals the headline word by word.
-5. A glitch drops into a long-exposure flower with flying symbols, and "From … / To …" closes it, with your logo.
+### `/brand-promo`
+- **The video:** a typed intro, a ring of 3D cards, a glitchy title drop, a spotlight for each work (playing its own sound), "Your story… next.", a 3D rush of clips and the liquid logo reveal.
+- **Sound:** a synthesised score and VoxCPM2 narration.
+- **Docs:** [SKILL.md](plugins/video-skills/skills/brand-promo/SKILL.md), [all config keys](plugins/video-skills/skills/brand-promo/references/config.md).
 
-Every scene change has its own sound (typing, whooshes, a riser, impacts, a glitch) over a synthesised ambient bed or your own track, and the mix is set to −14 LUFS. English or Khmer. The full render takes under a minute.
+### `/brand-loop`
+- **The video:** metaball blobs in two colour families that merge like mercury, rendered in Blender EEVEE at 4K60. Every motion is periodic, so the last frame flows into the first. The colours can come straight from your logo.
+- **Docs:** [SKILL.md](plugins/video-skills/skills/brand-loop/SKILL.md).
 
-Add `chapters` for a **~50 s long cut**: the four scenes repeat once per chapter (each with its own pictures, words, wall look and orb colours). Give it a song and its tempo and drop are measured, so the first cut lands on the drop and every cut sits on a bar.
-- **Docs:** [saas-promo/SKILL.md](saas-promo/SKILL.md) and [all config keys](saas-promo/references/config.md).
-- **Example config:** [saas-promo/examples/kumnit-saas.json](saas-promo/examples/kumnit-saas.json).
-
-### `/portfolio-reel`
-One `promo.json` describes the reel:
-- your photo, the hook question, the greeting, roles, the badge and the button;
-- 1-4 work sections, each a title and 1-3 clips or pictures;
-- two closing lines and your social profile card (handle, name, real stats).
-
-The video runs in this order:
-1. On a mustard-yellow gradient, the hook types in ("Looking for a / **Video editor?**").
-2. A white circle wipe opens on your profile hero.
-3. The page scrolls through your work: the clips play in rounded cards.
-4. A yellow light wipe brings the closing lines.
-5. The profile card pops up with counting stats. A cursor clicks Follow, then the card flips to its back.
-
-It comes with a synthesised lo-fi beat or your own track, a sound on every move, and a −14 LUFS mix. English or Khmer.
-- **Docs:** [portfolio-reel/SKILL.md](portfolio-reel/SKILL.md) and [all config keys](portfolio-reel/references/config.md).
+### `/generate-logo`
+- **Styles:** liquid, neon, bounce, lens and rise, each ending on your logo's own pixels.
+- **Files:** for each style, a 1080p60 MP4 with sound, a transparent WebM (and ProRes 4444) and a keyframe sheet.
+- **Sizes:** square and vertical versions too.
+- **Docs:** [SKILL.md](plugins/logo-skills/skills/generate-logo/SKILL.md).
 
 ## Run the scripts yourself (without Claude)
 
 ```bash
-generate-logo/scripts/animate.sh logo.png --styles liquid,neon --size square
-brand-promo/scripts/promo.sh my-promo/promo.json --preview     # 12 stills in ~30 s
-brand-promo/scripts/promo.sh my-promo/promo.json               # the full video, ~10 min
-brand-loop/scripts/loop.sh --name acme --logo logo.png --preview
-brand-loop/scripts/loop.sh --name acme --logo logo.png --res 1920x1080
-saas-promo/scripts/promo.sh my-saas/promo.json --preview       # 12 stills in ~10 s
-saas-promo/scripts/promo.sh my-saas/promo.json                 # the full video, under a minute
-portfolio-reel/scripts/promo.sh my-reel/promo.json --preview  # about 13 stills
-portfolio-reel/scripts/promo.sh my-reel/promo.json --jobs 4   # the full reel, about 2 min
+V=plugins/video-skills/skills; G=plugins/logo-skills/skills
+$V/portfolio-reel/scripts/promo.sh my-reel/promo.json --preview   # about 13 stills
+$V/portfolio-reel/scripts/promo.sh my-reel/promo.json --jobs 4    # the full reel, about 3 min
+$V/saas-promo/scripts/promo.sh my-saas/promo.json --preview       # 12 stills in ~10 s
+$V/saas-promo/scripts/promo.sh my-saas/promo.json                 # the full video
+$V/brand-promo/scripts/promo.sh my-promo/promo.json               # the full showreel, ~10 min
+$V/brand-loop/scripts/loop.sh --name acme --logo logo.png --res 1920x1080
+$G/generate-logo/scripts/animate.sh logo.png --styles liquid,neon --size square
 ```
 
 ## Requirements
@@ -159,8 +171,19 @@ portfolio-reel/scripts/promo.sh my-reel/promo.json --jobs 4   # the full reel, a
 | Skill | Needs |
 |---|---|
 | all | macOS or Linux, [ffmpeg](https://ffmpeg.org) (libx264; libx265 for brand-loop), Node 22+, Google Chrome or Chromium (`CHROME_PATH` if it is elsewhere) |
-| `/brand-promo` | Python with `numpy` and `scipy` (`PROMO_PY`). For narration, [VoxCPM2](https://github.com/OpenBMB/VoxCPM) (`pip install voxcpm soundfile`, `VOX_PY`). Without it, the promo is made without a narrator |
-| `/saas-promo`, `/portfolio-reel` | Python with `numpy` and `scipy` (`PROMO_PY`) |
-| `/brand-loop` | [Blender](https://www.blender.org) 4.2 or newer with EEVEE on a GPU (tested on 5.2, Apple Silicon) |
+| `/portfolio-reel`, `/saas-promo`, `/brand-promo` | Python with `numpy` and `scipy` (`PROMO_PY`) |
+| `/portfolio-reel` app UI | optional: [`qrencode`](https://fukuchi.org/works/qrencode/) for the QR code (`brew install qrencode`) |
+| `/brand-promo` | optional: [VoxCPM2](https://github.com/OpenBMB/VoxCPM) for narration (`pip install voxcpm soundfile`, `VOX_PY`) |
+| `/brand-loop` | [Blender](https://www.blender.org) 4.2 or newer with EEVEE on a GPU |
 
-The Khmer fonts Kantumruy Pro and Koulen are included under the SIL Open Font License ([brand-promo/fonts](brand-promo/fonts), [saas-promo/fonts](saas-promo/fonts)).
+## Repo layout
+
+```
+.claude-plugin/marketplace.json      the plugin marketplace ("chydevit-skills")
+plugins/video-skills/                plugin: portfolio-reel, saas-promo, brand-promo, brand-loop
+plugins/logo-skills/                 plugin: generate-logo
+docs/                                demo GIFs, contact sheets and short MP4s
+install.sh, doctor.sh                link the skills / check the tools
+```
+
+The Khmer fonts Kantumruy Pro and Koulen are included under the SIL Open Font License (in each skill's `fonts/` folder).

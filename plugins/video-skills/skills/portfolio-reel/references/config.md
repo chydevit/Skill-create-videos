@@ -8,6 +8,10 @@ Paths are relative to the folder that holds `promo.json`. Everything except `nam
   "lang": "en",
   "avatar": {"file": "me.jpg", "crop": [420, 80, 900]},
   "avatarStyle": "photo",
+  "ui": "app",
+  "site": "alex.studio",
+  "style": "amber",
+  "effects": {"ticker": false},
   "logo": "logo.png",
   "text": {
     "hook": ["Looking for a", "Video editor?"],
@@ -15,7 +19,9 @@ Paths are relative to the folder that holds `promo.json`. Everything except `nam
     "hello": "Hello, I'm Alex",
     "roles": ["Video editor", "Motion designer", "Creative"],
     "button": "Here's my work",
-    "cta": ["Let's turn that idea into visuals", "DM me, let's talk :)"]
+    "cta": ["Let's turn that idea into visuals", "DM me, let's talk :)"],
+    "highlight": "Alex",
+    "tags": ["Editing", "Motion", "Colour", "Sound"]
   },
   "sections": [
     {"title": "Short Form Edits", "clips": [{"file": "reel1.mp4", "at": 3}, "reel2.mp4", "reel3.mp4"]},
@@ -36,10 +42,16 @@ Paths are relative to the folder that holds `promo.json`. Everything except `nam
 | `lang` | `en` | `en` uses the system UI font (SF Pro on a Mac). `km` sets every text in Kantumruy Pro (bundled) |
 | `avatar` | none (a plain yellow disc) | a photo or a video still (`{"file", "at"}`), cropped square by `crop: [x, y, size]` px, or else the centre square, a bit above the middle |
 | `avatarStyle` | `photo` | `photo`: the picture in a thin yellow ring. `duotone`: a grey multiply over the yellow disc (best for light backgrounds) |
+| `ui` | `classic` | `classic`: the template's screens. `app`: a search bar, a bento dashboard, a carousel of browser and phone mockups, a chat screen and a profile card with a QR back (see SKILL.md) |
+| `site` | `profile.back` | the address shown in the `app` UI's browser mockups (`site/section-title`) |
+| `style` | `mustard` | the colour theme: `mustard` (the template), `midnight`, `sunset`, `amber` or `mint` (see SKILL.md) |
+| `effects` | all on | `false` turns every effect off. `{"name": false}` turns one off: `grain`, `bokeh`, `shine`, `marker`, `orbit`, `blur`, `labels`, `glare`, `ticker`, `confetti` |
 | `logo` | the avatar | the picture inside the profile card's white circle |
 | `text.hook` | `["Looking for a", "Video editor?"]` | the small line (word by word), then the big question |
 | `text.badge` | `Ideas, made visual` | the outlined pill with a star above the greeting |
 | `text.hello` | `Hello, I'm Alex` | the big greeting, word by word |
+| `text.highlight` | the words after the 2nd | the part of `hello` the highlighter swipes under (usually the name) |
+| `text.tags` | roles + section titles | the words that scroll in the ticker behind the closing lines |
 | `text.roles` | 3 roles | short roles, split by thin vertical bars |
 | `text.button` | `Here's my work` | the black pill's label |
 | `text.cta` | two lines | the closing lines on yellow. The second is optional |
@@ -48,6 +60,8 @@ Paths are relative to the folder that holds `promo.json`. Everything except `nam
 | `profile.stats` | 3 pairs | up to 3 `[label, value]`. Numbers count up from 0, strings appear as they are. Use real numbers only |
 | `profile.buttons` / `clicked` | `Follow`, `Message` / `Following` | the two buttons and the first one's label after the click |
 | `profile.back` | the handle | the text on the back of the card after the flip |
+| `profile.qr` | `profile.back` if it is a web address | the link in the `app` card's QR code (needs the `qrencode` tool: `brew install qrencode`) |
+| `colors.*` | from the style | any single colour: `bg` (3 stops), `title` (2), `accent`, `button`, `buttonText`, `ink`, `sub`, `page`, `grey`, `frame`, `pill`, `pillText`, `card` (2), `glow`, `confetti` |
 | `colors.bg` | mustard yellow, 3 stops | the gradient: centre, middle, edge |
 | `colors.title` | olive | the section titles' gradient: bottom, top |
 | `colors.button` | `#4c46f0` | the card's buttons |

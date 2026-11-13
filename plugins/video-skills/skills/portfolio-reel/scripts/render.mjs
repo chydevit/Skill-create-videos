@@ -1,4 +1,4 @@
-// Render the saas-promo frame by frame in headless Chrome (DevTools protocol), PNG frames to disk.
+// Render the portfolio-reel frame by frame in headless Chrome (DevTools protocol), PNG frames to disk.
 // node render.mjs --project <dir> --out <frames dir> [--fps 60] [--from 0 --to N] | --times 1.2,3.4 (stills) | --cues <file.json>
 // Serves the skill at /skill/ and the project (promo.json, assets/, build/) at /proj/.
 import http from 'node:http';
@@ -40,7 +40,7 @@ const server = http.createServer((req, res) => {
 await new Promise(r => server.listen(0, '127.0.0.1', r));
 const port = server.address().port;
 const debugPort = 9300 + Math.floor(Math.random() * 600);
-const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'saaspromo-chrome-'));
+const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolioreel-chrome-'));
 const chrome = spawn(findChrome(), [
   '--headless=new', `--remote-debugging-port=${debugPort}`, '--remote-allow-origins=*', `--user-data-dir=${profile}`,
   '--no-first-run', '--no-default-browser-check', '--hide-scrollbars', '--force-device-scale-factor=1',
@@ -49,7 +49,7 @@ const chrome = spawn(findChrome(), [
 let ws;
 try {
   let target;
-  for (let i = 0; i < 100 && !target; i++) {
+  for (let i = 0; i < 270 && !target; i++) {   // up to ~40 s: Chrome starts slowly when several renderers boot at once
     try { target = (await (await fetch(`http://127.0.0.1:${debugPort}/json/list`)).json()).find(t => t.type === 'page'); } catch {}
     if (!target) await new Promise(r => setTimeout(r, 150));
   }

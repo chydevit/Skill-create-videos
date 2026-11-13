@@ -1,0 +1,8 @@
+{
+  "name": "video-skills",
+  "version": "1.0.0",
+  "description": "Promo videos drawn in code: SaaS / product promos (11 s, or 50 s cut on the beat of your song), creator / developer intro reels (classic or app UI, 5 colour styles), studio showreels with narration and seamless 4K looping backgrounds. English or Khmer.",
+  "author": { "name": "chydevit" },
+  "homepage": "https://github.com/chydevit/Skill-create-videos",
+  "keywords": ["video", "promo", "portfolio", "showreel", "motion design", "khmer"]
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "chydevit-skills",
+  "description": "Claude Code skills that make finished logo animations and promo videos entirely in code: animated logo reveals, SaaS / product promos, creator and developer intro reels, studio showreels and looping brand backgrounds.",
+  "owner": { "name": "chydevit" },
+  "plugins": [
+    {
+      "name": "logo-skills",
+      "description": "/generate-logo: turn any logo image into 5-second animated logo reveals in five styles (liquid, neon, bounce, lens, rise), with sound and transparent versions.",
+      "author": { "name": "chydevit" },
+      "source": "./plugins/logo-skills",
+      "category": "design",
+      "homepage": "https://github.com/chydevit/Skill-create-videos"
+    },
+    {
+      "name": "video-skills",
+      "description": "/saas-promo (11 s or 50 s beat-synced product promos), /portfolio-reel (30 s creator / developer intro reels, classic or app UI, 5 colour styles), /brand-promo (50 s studio showreels with narration) and /brand-loop (seamless 4K liquid backgrounds).",
+      "author": { "name": "chydevit" },
+      "source": "./plugins/video-skills",
+      "category": "design",
+      "homepage": "https://github.com/chydevit/Skill-create-videos"
+    }
+  ]
+}
