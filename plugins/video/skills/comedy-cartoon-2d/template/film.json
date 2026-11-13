@@ -1,0 +1,4 @@
+{
+  "title": "Starter Toon",
+  "notes": "title = output file name (film/<title>.mp4). Dialogue language + translation live in voices/lines.json."
+}

@@ -1,0 +1,456 @@
+"""Per-scene layouts: environment, character placement, camera shots, prop events."""
+import math
+
+import bpy
+import numpy as np
+
+import bl_env as E
+import bl_util as U
+import bl_chars as C
+from bl_hud import make_emoji
+from bl_util import mat, sphere, empty, obj, text_obj, flat, pop_curve, smooth, window
+
+PI = math.pi
+
+
+def pulse(A, ob, t0, amp=0.3, d=0.6, hop=0.0):
+    u = np.clip((A.t - t0) / d, 0, 1)
+    b = np.sin(PI * u) * ((A.t >= t0) & (A.t <= t0 + d))
+    for i in range(3):
+        A.get(ob, "scale", i)[:] *= 1 + amp * b
+    if hop:
+        A.get(ob, "location", 2)[:] += hop * b
+
+
+class Scene:
+    """Base: subclasses fill in build() and optionally prop()."""
+    kids = {}
+    bobo_home = (0, 0, 1.5)
+    bobo_start_hidden = False
+    spots = {}
+    shots = {}
+    first_shot = "wide"
+
+    def __init__(self, A, hud, events):
+        self.A = A
+        self.hud = hud
+        self.events = events
+        self.animals = {}
+        self.objs = {}
+
+    def daylight(self):
+        E.sky()
+        E.sun_light(3.0, "#FFF3DC", (52, 0, -35))
+        E.fill_light(250, (0, -8, 5), "#FFFFFF", 8)
+        E.ground()
+        E.hills()
+        E.clouds(self.A, 7, seed=len(type(self).__name__))
+
+    def prop(self, name, action, t, args):
+        pass
+
+
+# ------------------------------------------------------------------ 1
+class GoodMorning(Scene):
+    kids = {"milo": ((-2.3, 2.6), 0.35), "luna": ((5.0, 0.6), -0.35)}
+    bobo_home = (0.0, -0.1, 1.32)
+    bobo_start_hidden = True
+    shots = {
+        "wide": ((0, -7.6, 2.3), (-0.6, 1.2, 1.0)),
+        "two": ((0, -4.6, 1.35), (0, 0.3, 0.95)),
+        "three": ((0, -4.8, 1.45), (0, 0.3, 1.05)),
+        "front": ((0, -3.9, 1.25), (0, 0.2, 0.95)),
+    }
+
+    def build(self):
+        self.daylight()
+        _, self.hinge = E.house((-2.3, 3.0, 0))
+        E.tree((-5.2, 4.5, 0), 1.2, name="t1", seed=1)
+        E.tree((3.6, 4.0, 0), 1.1, "#66BB6A", name="t2", seed=2)
+        E.tree((6.5, 7.0, 0), 1.3, name="t3", seed=3)
+        E.bush((1.6, 3.2, 0), 0.6, name="b1")
+        E.bush((-4.3, 2.4, 0), 0.5, "#66BB6A", name="b2")
+        E.fence(0.6, 5.5, 2.4, "fence")
+        E.flower_field(34, (-6, 6, -1.5, 3.5), 11,
+                       avoid=((-2.3, 1.2, 1.6, 2.5), (0, 0.2, 1.8, 1.0)))
+        E.sun_disc((9, 40, 16), 3.0, face=True)
+
+    def prop(self, name, action, t, args):
+        if name == "door":
+            A = self.A
+            u = smooth((A.t - t) / 0.8)
+            close = smooth((A.t - (t + 3.2)) / 0.8)
+            A.set(self.hinge, "rotation_euler", 2, 1.7 * u * (1 - close))
+
+
+# ------------------------------------------------------------------ 2
+class Colors(Scene):
+    kids = {"milo": ((-4.8, 0.3), 0.3), "luna": ((-4.0, 0.6), 0.1)}
+    bobo_home = (0.9, -0.1, 1.55)
+    spots = {"flower": (1.5, 0.35, 0.95, True)}
+    shots = {
+        "wide": ((0, -7.0, 2.2), (-0.5, 0.6, 1.0)),
+        "garden": ((0.3, -5.2, 1.6), (0.3, 0.3, 0.9)),
+        "flower": ((1.0, -1.9, 1.05), (1.4, 0.4, 0.75)),
+        "sky": ((0, -5.0, 1.2), (5.5, 30, 11)),
+        "tree": ((-1.0, -3.6, 1.7), (-2.8, 3.0, 1.7)),
+        "front": ((0, -4.2, 1.2), (-0.3, 0.1, 0.95)),
+    }
+
+    def build(self):
+        self.daylight()
+        self.red = E.flower((1.5, 0.4, 0), "#E53935", 2.4, "red_flower", petals=7)
+        self.pink = E.flower((2.4, 1.3, 0), "#EC407A", 1.9, "pink_flower")
+        self.purple = E.flower((-2.3, 1.2, 0), "#8E24AA", 1.9, "purple_flower")
+        E.tree((-2.8, 3.2, 0), 1.3, "#43A047", name="gtree", seed=4)
+        E.tree((4.5, 5.5, 0), 1.1, name="gtree2", seed=5)
+        E.bush((3.4, 2.4, 0), 0.6, name="gb1")
+        E.bush((-4.6, 1.8, 0), 0.55, "#66BB6A", name="gb2")
+        E.flower_field(70, (-6, 6, -1.2, 4.5), 21, s=(0.7, 1.3),
+                       avoid=((-0.5, 0.1, 1.9, 0.9), (1.5, 0.4, 0.5, 0.5), (2.4, 1.3, 0.4, 0.4),
+                              (-2.3, 1.2, 0.4, 0.4)))
+        self.sun = E.sun_disc((5.5, 30, 11), 2.4, face=True)
+        self.bfly, self.bwings = E.butterfly()
+        self.bfly.scale = (1.6, 1.6, 1.6)
+        self.bfly.location = (8, 2, 2.5)
+        A = self.A
+        for s, w in self.bwings:
+            A.set(w, "rotation_euler", 1, -s * 0.7 * np.sin(2 * PI * 6 * A.t))
+
+    def prop(self, name, action, t, args):
+        A = self.A
+        if name in ("red_flower", "pink_flower", "purple_flower") and action == "bounce":
+            ob = {"red_flower": self.red, "pink_flower": self.pink,
+                  "purple_flower": self.purple}[name]
+            pulse(A, ob, t, 0.18, 0.7)
+        elif name == "butterfly" and action == "fly_in":
+            u = smooth((A.t - t) / 2.2)
+            after = A.t >= t
+            # fly in from the right, then flutter around near the kids
+            cx, cy, cz = 0.62, -0.55, 0.85
+            wx = cx + 0.3 * np.sin(2 * PI * 0.22 * (A.t - t))
+            wz = cz + 0.15 * np.sin(2 * PI * 0.5 * (A.t - t))
+            wy = cy + 0.2 * np.cos(2 * PI * 0.22 * (A.t - t))
+            x = 8 * (1 - u) + wx * u
+            y = 2 * (1 - u) + wy * u
+            z = 2.5 * (1 - u) + wz * u
+            A.set(self.bfly, "location", 0, np.where(after, x, 8))
+            A.set(self.bfly, "location", 1, np.where(after, y, 2))
+            A.set(self.bfly, "location", 2, np.where(after, z, 2.5))
+            A.set(self.bfly, "rotation_euler", 2, 0.4 * np.sin(2 * PI * 0.22 * (A.t - t)))
+
+
+# ------------------------------------------------------------------ 3
+class Counting(Scene):
+    kids = {"milo": ((-4.8, 1.0), 0.3), "luna": ((4.8, 1.0), -0.3)}
+    bobo_home = (0.0, 0.7, 1.75)
+    shots = {
+        "wide": ((0, -7.2, 2.4), (0, 1.0, 1.0)),
+        "apples": ((0, -5.0, 1.8), (0, 0.3, 0.6)),
+        "apples_close": ((0, -3.9, 1.25), (0, -0.1, 0.45)),
+        "front": ((0, -4.4, 1.3), (0, 0.4, 0.8)),
+    }
+
+    def build(self):
+        self.daylight()
+        E.tree((0, 2.8, 0), 1.45, "#43A047", name="atree", apples=12, seed=7)
+        E.tree((-5.0, 5.0, 0), 1.1, name="atree2", seed=8)
+        E.tree((5.2, 4.6, 0), 1.2, "#66BB6A", name="atree3", seed=9)
+        E.fence(-6, -2.5, 3.2, "f1")
+        E.fence(2.5, 6, 3.2, "f2")
+        E.flower_field(40, (-6, 6, -1.5, 3.5), 31, avoid=((0, -0.2, 2.7, 0.5), (0, 1.0, 2.0, 1.0),
+                                                          (0, 2.8, 1.2, 0.8)))
+        self.apples = []
+        self.nums = []
+        cols = ["#E53935", "#FB8C00", "#FDD835", "#43A047", "#00ACC1", "#1E88E5", "#8E24AA",
+                "#EC407A", "#E53935", "#FB8C00"]
+        font = bpy.data.fonts.load("/System/Library/Fonts/Supplemental/Arial Rounded Bold.ttf",
+                                   check_existing=True)
+        for k in range(10):
+            x = -2.25 + 0.5 * k
+            a = E.apple("apple%d" % k, (x, -0.25, 0), 0.13)
+            self.apples.append(a)
+            g = empty("num%d" % k, (x, -0.25, 0.52))
+            text_obj("numt%d" % k, str(k + 1), 0.22, flat(cols[k]), font, g, (0, 0, 0))
+            text_obj("numo%d" % k, str(k + 1), 0.22, flat("#FFFFFF"), font, g, (0, 0, -0.006),
+                     offset=0.018)
+            g.rotation_euler = (PI / 2, 0, 0)
+            g.scale = (0, 0, 0)
+            self.nums.append(g)
+        self.counts = []  # (t, n) and (t, 'reset')
+
+    def prop(self, name, action, t, args):
+        if name == "apple":
+            if action == "count":
+                self.counts.append((t, args[0]))
+                pulse(self.A, self.apples[args[0] - 1], t, 0.35, 0.5, hop=0.18)
+            elif action == "reset":
+                self.counts.append((t, "reset"))
+
+    def finish(self):
+        A = self.A
+        resets = sorted(t for t, n in self.counts if n == "reset") + [1e9]
+        vals = [np.zeros(A.nf) for _ in range(10)]
+        for t, n in self.counts:
+            if n == "reset":
+                continue
+            t1 = min(r for r in resets if r > t)
+            vals[n - 1] += pop_curve(A.t, t, t1)
+        for k, g in enumerate(self.nums):
+            for i in range(3):
+                A.set(g, "scale", i, vals[k])
+
+
+# ------------------------------------------------------------------ 4
+class Animals(Scene):
+    kids = {"milo": ((-5.8, 0.4), 0.45), "luna": ((-5.0, 0.2), 0.45)}
+    bobo_home = (-2.6, 0.2, 1.88)
+    shots = {
+        "wide": ((0.3, -6.6, 2.2), (0.3, 1.2, 0.7)),
+        "cat": ((-0.6, -2.2, 0.9), (-0.35, 1.0, 0.62)),
+        "dog": ((0.55, -2.0, 0.95), (0.75, 1.4, 0.66)),
+        "duck": ((1.55, -1.9, 0.85), (1.65, 0.8, 0.58)),
+        "cow": ((2.6, -2.9, 1.5), (2.9, 2.6, 1.15)),
+        "rabbit": ((3.1, -1.9, 0.85), (3.3, 0.6, 0.58)),
+        "kids": ((-2.3, -3.9, 1.35), (-2.4, 0.3, 0.95)),
+    }
+
+    def build(self):
+        self.daylight()
+        E.barn((-0.8, 7.0, 0))
+        E.fence(-6, 6, 4.0, "ffence")
+        E.hay((3.8, 4.8, 0.35), "hay1")
+        E.hay((-3.8, 5.0, 0.35), "hay2")
+        E.tree((-5.5, 6.0, 0), 1.2, name="ft1", seed=10)
+        E.tree((5.8, 6.5, 0), 1.3, name="ft2", seed=11)
+        E.flower_field(28, (-6, 6, -1.5, 3.8), 41, avoid=((0.9, 1.5, 3.2, 1.6), (-2.0, 0.2, 1.0, 0.6)))
+        self.animals = {
+            "cat": C.Animal("cat", (-0.35, 1.0), -0.45, 1.3),
+            "dog": C.Animal("dog", (0.75, 1.4), -0.45, 1.3),
+            "duck": C.Animal("duck", (1.65, 0.8), -0.35, 1.45),
+            "cow": C.Animal("cow", (2.9, 2.6), -0.55, 1.1),
+            "rabbit": C.Animal("rabbit", (3.3, 0.6), -0.4, 1.3),
+        }
+
+
+# ------------------------------------------------------------------ 5
+class Picnic(Scene):
+    kids = {"milo": ((-1.5, 1.0), 0.35), "luna": ((1.5, 1.0), -0.35)}
+    bobo_home = (0.0, 1.3, 1.45)
+    shots = {
+        "wide": ((0, -5.8, 2.5), (0, 0.6, 0.6)),
+        "food": ((0, -2.5, 1.15), (0, 0.1, 0.2)),
+        "picnic": ((0, -4.6, 1.8), (0, 0.6, 0.8)),
+        "front": ((0, -4.2, 1.35), (0, 0.6, 0.9)),
+    }
+
+    def build(self):
+        self.daylight()
+        E.tree((-2.8, 3.2, 0), 1.4, name="pt1", apples=6, seed=12)
+        E.tree((3.5, 4.5, 0), 1.2, "#66BB6A", name="pt2", seed=13)
+        E.bush((1.5, 3.2, 0), 0.6, name="pb1")
+        E.flower_field(40, (-6, 6, -1.5, 4.0), 51, avoid=((0, 0.5, 2.0, 1.2), (-1.5, 1.0, 0.5, 0.5),
+                                                          (1.5, 1.0, 0.5, 0.5)))
+        E.picnic_blanket((0, 0.5), 2.8, 1.8)
+        E.basket((0.2, 1.05, 0.02))
+        s = 1.35
+        self.food = {
+            "apple": E.apple("f_apple", (-0.9, 0.0, 0.02), 0.11 * s),
+            "banana": E.banana("f_banana", (-0.45, 0.0, 0.02), s),
+            "bread": E.bread("f_bread", (0.02, 0.05, 0.02), s),
+            "milk": E.milk("f_milk", (0.48, 0.02, 0.02), s * 0.9),
+            "water": E.water("f_water", (0.92, 0.0, 0.02), s * 0.9),
+        }
+        for k, g in enumerate(self.food.values()):
+            g.rotation_euler = (0, 0, 0.1 * (k - 2))
+
+    def prop(self, name, action, t, args):
+        if name in self.food:
+            pulse(self.A, self.food[name], t, 0.3, 0.55, hop=0.15)
+
+
+# ------------------------------------------------------------------ 6
+class Actions(Scene):
+    kids = {"milo": ((-1.1, 0.0), 0.12), "luna": ((0.15, 0.0), -0.05)}
+    bobo_home = (1.3, -0.1, 1.2)
+    shots = {
+        "wide": ((0, -6.6, 2.2), (0, 1.0, 0.9)),
+        "play": ((0, -4.5, 1.3), (0, 0.2, 0.9)),
+        "dance": ((0.3, -3.9, 1.0), (0, 0.2, 0.95)),
+        "front": ((0, -4.4, 1.2), (0, 0.2, 0.9)),
+    }
+
+    def build(self):
+        self.daylight()
+        _, seats = E.swing_set((-3.0, 3.0, 0))
+        A = self.A
+        for k, p in enumerate(seats):
+            A.set(p, "rotation_euler", 0, 0.25 * np.sin(2 * PI * 0.45 * A.t + k * 1.5))
+        E.slide((3.2, 2.8, 0))
+        E.sandbox((0.5, 3.6, 0))
+        E.tree((-6.0, 5.5, 0), 1.3, name="plt1", seed=14)
+        E.tree((6.2, 5.2, 0), 1.2, name="plt2", seed=15)
+        E.flower_field(24, (-6, 6, -1.5, 2.0), 61, avoid=((0, 0, 2.2, 0.8),))
+
+
+# ------------------------------------------------------------------ 7
+class Feelings(Scene):
+    kids = {"milo": ((-1.1, 0.0), 0.15), "luna": ((0.15, 0.0), -0.05)}
+    bobo_home = (1.3, -0.1, 1.35)
+    shots = {
+        "wide": ((0, -6.0, 2.0), (0, 0.5, 0.9)),
+        "c_milo": ((-1.0, -2.3, 1.3), (-1.1, 0, 1.12)),
+        "c_luna": ((0.15, -2.3, 1.3), (0.15, 0, 1.12)),
+        "c_bobo": ((1.25, -2.0, 1.4), (1.3, 0, 1.33)),
+        "two": ((-0.5, -3.5, 1.25), (-0.5, 0, 1.0)),
+        "bobo": ((1.25, -2.0, 1.4), (1.3, 0, 1.33)),
+        "three": ((0, -4.4, 1.35), (0.1, 0.2, 1.0)),
+        "front": ((0, -4.2, 1.25), (0.1, 0, 0.95)),
+    }
+
+    def build(self):
+        self.daylight()
+        E.tree((-3.6, 3.2, 0), 1.3, name="et1", seed=16)
+        E.tree((3.8, 3.8, 0), 1.2, "#66BB6A", name="et2", seed=17)
+        E.bush((-1.5, 3.0, 0), 0.6, name="eb1")
+        E.bush((1.6, 3.4, 0), 0.5, "#66BB6A", name="eb2")
+        E.flower_field(60, (-6, 6, -1.5, 4.0), 71, avoid=((0, 0, 2.2, 0.8),))
+        self.hud.build_emojis()
+        self.shows = []
+
+    def prop(self, name, action, t, args):
+        if name == "emoji":
+            self.shows.append((t, args[0]))
+
+    def finish(self):
+        self.hud.emoji_track(self.shows, self.A.t[-1] + 1)
+
+
+# ------------------------------------------------------------------ 8
+class Conversation(GoodMorning):
+    kids = {"milo": ((-0.8, 0.2), 0.5), "luna": ((0.8, 0.2), -0.5)}
+    bobo_home = (0.0, -0.1, 1.32)
+    bobo_start_hidden = True
+    shots = {
+        "wide": ((0, -7.0, 2.2), (-0.4, 1.2, 1.0)),
+        "two": ((0, -4.2, 1.3), (0, 0.2, 0.95)),
+        "three": ((0, -4.6, 1.45), (0, 0.2, 1.05)),
+        "front": ((0, -4.0, 1.25), (0, 0.2, 0.95)),
+    }
+
+
+# ------------------------------------------------------------------ 9
+class Quiz(Scene):
+    kids = {"milo": ((-2.3, 0.5), 0.45), "luna": ((-1.35, 0.3), 0.4)}
+    bobo_home = (-0.45, 0.1, 1.35)
+    shots = {
+        "wide": ((-0.3, -5.9, 1.8), (-0.3, 0.8, 1.05)),
+        "front": ((-0.3, -5.6, 1.7), (-0.3, 0.8, 1.05)),
+    }
+
+    def build(self):
+        E.sky("#7E57C2", "#B39DDB", 0.8)
+        E.sun_light(2.6, "#FFF8E1", (55, 0, -25))
+        E.fill_light(300, (0, -7, 4), "#FFFFFF", 8)
+        E.ground("#9575CD", "#7E57C2")
+        _, self.board = E.quiz_stage()
+        for k, x in enumerate((-3.8, 3.8)):
+            spot = bpy.data.lights.new("spot%d" % k, "SPOT")
+            spot.energy = 400
+            spot.spot_size = 0.6
+            spot.color = U.rgb(["#FFF59D", "#F8BBD0"][k])[:3]
+            so = bpy.data.objects.new("spot%d" % k, spot)
+            U.link(so)
+            so.location = (x, -2.5, 4.5)
+            from mathutils import Vector
+            so.rotation_euler = (Vector((-0.5, 0.8, 1.0)) - Vector(so.location)).to_track_quat(
+                "-Z", "Y").to_euler()
+        # items shown on the board
+        c = (1.0, 0.98, 1.3)
+        self.items = {}
+        g = empty("q_red", c)
+        sphere("q_redb", (0, 0, 0), 0.4, mat("#E53935", 0.3, coat=0.5), g)
+        self.items["red"] = g
+        g = empty("q_blue", c)
+        sphere("q_blueb", (0, 0, 0), 0.4, mat("#1E88E5", 0.3, coat=0.5), g)
+        self.items["blue"] = g
+        cat = C.Animal("cat", (c[0], c[1] - 0.2, 0.62), 0.0, 1.6)
+        cow = C.Animal("cow", (c[0], c[1] - 0.2, 0.62), 0.0, 0.8)
+        self.animals = {"cat": cat, "cow": cow}
+        self.items["cat"] = cat.root
+        self.items["cow"] = cow.root
+        g = empty("q_apples", c)
+        self.qapples = []
+        for k in range(3):
+            a = E.apple("qapple%d" % k, (-0.45 + 0.45 * k, 0, -0.18), 0.16, g)
+            self.qapples.append(a)
+        self.items["apples"] = g
+        g = empty("q_happy", c, rot=(PI / 2, 0, 0))
+        make_emoji(g, "happy", 0.45, lit=True)
+        self.items["happy"] = g
+        self.base_scale = {k: tuple(v.scale) for k, v in self.items.items()}
+        for v in self.items.values():
+            v.scale = (0, 0, 0)
+        self.shows = []
+
+    def prop(self, name, action, t, args):
+        if name == "quiz":
+            self.shows.append((t, args[0]))
+        elif name == "qapple":
+            pulse(self.A, self.qapples[args[0] - 1], t, 0.35, 0.5, hop=0.15)
+
+    def finish(self):
+        A = self.A
+        shows = sorted(self.shows)
+        vals = {k: np.zeros(A.nf) for k in self.items}
+        for i, (t0, kind) in enumerate(shows):
+            t1 = shows[i + 1][0] - 0.1 if i + 1 < len(shows) else A.t[-1] + 1
+            if kind in vals:  # "none" clears the board
+                vals[kind] += pop_curve(A.t, t0, t1)
+        for k, ob in self.items.items():
+            bs = self.base_scale[k]
+            for i in range(3):
+                A.set(ob, "scale", i, vals[k] * bs[i])
+            if k in ("red", "blue", "apples"):
+                A.set(ob, "rotation_euler", 2, 0.25 * np.sin(2 * PI * 0.4 * A.t))
+
+
+# ------------------------------------------------------------------ 10
+class Goodbye(Scene):
+    kids = {"milo": ((-0.9, 0.2), 0.3), "luna": ((0.9, 0.2), -0.3)}
+    bobo_home = (0.0, -0.1, 1.32)
+    shots = {
+        "wide": ((0, -7.2, 2.2), (0, 1.2, 1.2)),
+        "three": ((0, -4.8, 1.45), (0, 0.3, 1.05)),
+        "front": ((0, -4.1, 1.3), (0, 0.2, 1.0)),
+    }
+
+    def build(self):
+        E.sky("#5C6BC0", "#FFAB91", 1.0)
+        E.sun_light(2.6, "#FFB74D", (75, 0, -20))
+        E.fill_light(220, (0, -8, 5), "#FFE0B2", 8)
+        E.ground("#8BC34A", "#689F38")
+        E.hills(("#7CB342", "#9CCC65", "#689F38"))
+        E.house((-3.2, 4.0, 0))
+        E.tree((3.4, 4.2, 0), 1.2, name="gt1", seed=18)
+        E.tree((-6.2, 6.0, 0), 1.2, name="gt2", seed=19)
+        E.flower_field(40, (-6, 6, -1.5, 3.0), 81, avoid=((0, 0.2, 1.8, 1.0), (-3.2, 3.0, 1.6, 1.2)))
+        self.sun = E.sun_disc((2.0, 40, 3.5), 3.2, face=True, color="#FF8A3D")
+        A = self.A
+        A.set(self.sun, "location", 2, 4.5 - 0.1 * A.t)
+        for k in range(4):
+            c = E.cloud((-18 + 12 * k, 30, 8 + k % 2 * 2), 1.8, "scloud%d" % k)
+            for ob in c.children:
+                ob.material_slots[0].material = mat("#F8BBD0", 0.9, emit=0.5)
+
+
+# Reusable sets. The short names are what new episodes should use in "set";
+# the long names keep the first episode's scene names working.
+SCENE_CLASSES = {
+    "house": GoodMorning, "garden": Colors, "apple_tree": Counting, "farm": Animals,
+    "picnic": Picnic, "playground": Actions, "meadow": Feelings, "house_talk": Conversation,
+    "quiz_stage": Quiz, "sunset": Goodbye,
+    "good_morning": GoodMorning, "colors": Colors, "counting": Counting, "animals": Animals,
+    "actions": Actions, "feelings": Feelings, "conversation": Conversation,
+    "quiz": Quiz, "goodbye": Goodbye,
+}
