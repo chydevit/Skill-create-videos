@@ -1,0 +1,26 @@
+// Character model sheet: poses + expressions of the cast. Edit for your film's cast, then `npm run sheet`.
+import { createCanvas } from '@napi-rs/canvas';
+import fs from 'node:fs';
+import { W, H, C, text } from './core.mjs';
+import { benny, marge, copBike, car, carFront, duck, bag, bill, fries } from './chars.mjs';
+fs.mkdirSync('build/stills', { recursive: true });
+const cv = createCanvas(W, H), ctx = cv.getContext('2d');
+ctx.fillStyle = C.skyLow; ctx.fillRect(0, 0, W, H);
+ctx.fillStyle = C.walk; ctx.fillRect(0, 980, W, 100);
+const exprs = ['worried', 'panic', 'determined', 'strain', 'sheepish', 'happy'];
+benny(ctx, { x: 120, y: 440, s: 1, expr: 'worried', sweat: 1, t: 0.3 });
+benny(ctx, { x: 330, y: 440, s: 1, pose: 'run', ph: 0.2, expr: 'panic', sweat: 1, t: 0.6 });
+benny(ctx, { x: 560, y: 440, s: 1, pose: 'push', ph: 0.3, expr: 'strain' });
+benny(ctx, { x: 780, y: 440, s: 1, pose: 'signal', expr: 'sheepish' });
+exprs.forEach((e, i) => benny(ctx, { x: 120 + i * 120, y: 700, s: 0.55, expr: e, pose: 'stand' }));
+marge(ctx, { x: 1000, y: 470, s: 1, expr: 'smirk', bagHeld: true });
+marge(ctx, { x: 1200, y: 470, s: 1, pose: 'run', ph: 0.3, expr: 'yell' });
+['deadpan', 'angry', 'strain', 'grin'].forEach((e, i) => marge(ctx, { x: 900 + i * 110, y: 720, s: 0.55, expr: e }));
+copBike(ctx, { x: 1530, y: 470, s: 1, pedal: 0.1, expr: 'bored', light: 0 });
+copBike(ctx, { x: 1780, y: 470, s: 0.7, pedal: 0.4, expr: 'yawn', light: 0.2, bell: 1 });
+car(ctx, { x: 260, y: 1020, s: 0.9, face: 'grimace', bag: { show: true }, crew: c => { benny(c, { x: 60, y: -88, s: 0.62, pose: 'drive', expr: 'panic', sweat: 1, wheel: [60, -112] }); }, outside: c => {} });
+car(ctx, { x: 740, y: 1020, s: 0.9, face: 'worried', light: 0 });
+carFront(ctx, { x: 1180, y: 1030, s: 0.95, face: 'grimace' });
+duck(ctx, 1450, 1000, 1, 0.2); duck(ctx, 1560, 1000, 0.55, 0.5, true); duck(ctx, 1630, 1000, 0.55, 0.7, true);
+bag(ctx, 1760, 960, 0.8); bill(ctx, 1860, 860, 0.6, 0.3); fries(ctx, 1870, 990, 0.8);
+fs.writeFileSync('build/stills/sheet.png', cv.toBuffer('image/png'));

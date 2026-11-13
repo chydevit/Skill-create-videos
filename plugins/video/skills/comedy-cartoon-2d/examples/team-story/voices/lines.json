@@ -1,0 +1,200 @@
+{
+  "lang": "km",
+  "translation": "en",
+  "voices": {
+    "narrator": {
+      "seed": 3101,
+      "gain": 0.9,
+      "pan": 0,
+      "design": "A warm, friendly Cambodian storyteller narrating a short animated film, clear natural mid-range voice, calm pleasant pace",
+      "sample": "នៅក្នុងទីក្រុងដ៏ស្រស់ស្អាតមួយ មានរឿងរ៉ាវតូចមួយ ដែលយើងចង់ប្រាប់អ្នក។"
+    },
+    "smei": {
+      "seed": 3202,
+      "gain": 0.95,
+      "pan": 0,
+      "design": "A calm, wise Cambodian man in his mid-forties, the deepest voice of the cast, low warm gentle tone, slow relaxed and kind, like a respected mentor",
+      "sample": "ប្អូនៗ ការងារល្អ ចាប់ផ្តើមពីការស្តាប់គ្នា និងការអត់ធ្មត់។"
+    },
+    "nimith": {
+      "seed": 3313,
+      "gain": 0.95,
+      "pan": 0,
+      "design": "A calm, thoughtful Cambodian man in his early thirties, steady medium-low voice, clear and measured, gentle and confident, like a careful engineer explaining a plan",
+      "sample": "មុននឹងចាប់ផ្តើម យើងគួរគិតឱ្យច្បាស់ពីរចនាសម្ព័ន្ធទាំងមូលសិន។"
+    },
+    "devit": {
+      "seed": 3414,
+      "gain": 0.95,
+      "pan": 0,
+      "design": "An energetic, playful young Cambodian man in his early twenties, slightly higher-pitched bright voice, the most lively and excited of the group, quick and upbeat",
+      "sample": "ហេ! ខ្ញុំសរសេរកូដរួចហើយ! មើលនេះ លឿនណាស់មែនទេ?"
+    }
+  },
+  "lines": {
+    "n1": [
+      "narrator",
+      "នៅក្នុងក្រុងភ្នំពេញ មានក្រុមការងារបច្ចេកវិទ្យាតូចមួយ ដែលមានមនុស្សបីនាក់។",
+      "In Phnom Penh, there is a small tech team of three people."
+    ],
+    "d1": [
+      "devit",
+      "ខ្ញុំឈ្មោះដេវីត ខ្ញុំជា Software Developer ថ្មី។",
+      "My name is Devit. I'm a new Software Developer."
+    ],
+    "d2": [
+      "devit",
+      "ខ្ញុំចូលចិត្តសរសេរកូដ ហើយបង្កើតមុខងារថ្មីៗឱ្យបានលឿន!",
+      "I love writing code and building new features fast!"
+    ],
+    "m1": [
+      "nimith",
+      "ខ្ញុំឈ្មោះនិមិត្ត ខ្ញុំជា Software Engineer។",
+      "My name is Nimith. I'm a Software Engineer."
+    ],
+    "m2": [
+      "nimith",
+      "មុននឹងសរសេរកូដ ខ្ញុំគិតពីការរចនាប្រព័ន្ធទាំងមូល ដើម្បីឱ្យវារឹងមាំ និងអាចពង្រីកបាន។",
+      "Before I write code, I think about the design of the whole system, so it's strong and can grow."
+    ],
+    "n2": [
+      "narrator",
+      "និមិត្តមានវ័យច្រើនជាងដេវីត ដូច្នេះដេវីតហៅគាត់ថា បងនិមិត្ត។",
+      "Nimith is older than Devit, so Devit calls him Bong Nimith."
+    ],
+    "s1": [
+      "smei",
+      "ខ្ញុំឈ្មោះស្មី។ ខ្ញុំធ្វើការក្នុងវិស័យបច្ចេកវិទ្យាជាងម្ភៃឆ្នាំហើយ។",
+      "My name is Smei. I've worked in technology for more than twenty years."
+    ],
+    "s2": [
+      "smei",
+      "ឥឡូវនេះ ខ្ញុំជាគ្រូណែនាំ (Mentor) របស់ក្រុមនេះ។",
+      "Now I'm the mentor of this team.",
+      "ឥឡូវនេះ ខ្ញុំជាគ្រូណែនាំ Mentor របស់ក្រុមនេះ។"
+    ],
+    "s3": [
+      "smei",
+      "ប្អូនៗ! យើងត្រូវបង្កើតកម្មវិធីដឹកជញ្ជូនម្ហូបមួយ ក្នុងរយៈពេលតែមួយខែ។",
+      "Everyone! We need to build a food delivery app in just one month."
+    ],
+    "s4": [
+      "smei",
+      "បងចង់ឃើញប្អូនទាំងពីរធ្វើការជាមួយគ្នា។",
+      "I want to see you two work together."
+    ],
+    "d3": [
+      "devit",
+      "កុំបារម្ភ បងស្មី! ខ្ញុំអាចសរសេរវាបានក្នុងមួយសប្តាហ៍!",
+      "Don't worry, Bong Smei! I can write it in one week!"
+    ],
+    "m3": [
+      "nimith",
+      "ចាំបន្តិចដេវីត។",
+      "Wait a moment, Devit."
+    ],
+    "m4": [
+      "nimith",
+      "យើងត្រូវគិតថា បើមានអ្នកប្រើរាប់ម៉ឺននាក់ក្នុងពេលតែមួយ តើប្រព័ន្ធនឹងទ្រាំបានទេ?",
+      "We have to think: if tens of thousands of people use it at once, can the system handle it?"
+    ],
+    "s5": [
+      "smei",
+      "សំណួរល្អណាស់ និមិត្ត។",
+      "Very good question, Nimith."
+    ],
+    "n3": [
+      "narrator",
+      "ថ្ងៃដាក់ឱ្យប្រើប្រាស់បានមកដល់។",
+      "Launch day arrived."
+    ],
+    "n4": [
+      "narrator",
+      "មានអ្នកប្រើច្រើនណាស់... ហើយកម្មវិធីក៏គាំង!",
+      "So many people used it... and the app crashed!"
+    ],
+    "d4": [
+      "devit",
+      "អូ៎ទេ! Server ទ្រាំមិនបាន!",
+      "Oh no! The server can't handle it!"
+    ],
+    "d5": [
+      "devit",
+      "បងស្មី ធ្វើម៉េចឥឡូវ?",
+      "Bong Smei, what do we do now?"
+    ],
+    "s6": [
+      "smei",
+      "ដេវីត ស្ងប់ចិត្តសិន។",
+      "Devit, calm down first."
+    ],
+    "s7": [
+      "smei",
+      "ទៅសួរបងនិមិត្តទៅ គាត់មានផែនការ។",
+      "Go ask Bong Nimith. She has a plan."
+    ],
+    "m5": [
+      "nimith",
+      "មិនអីទេដេវីត។ បងបានរៀបចំផែនការបម្រុងទុករួចហើយ។",
+      "It's okay, Devit. I already prepared a backup plan."
+    ],
+    "m6": [
+      "nimith",
+      "យើងបន្ថែម server និង load balancer។",
+      "We add servers and a load balancer."
+    ],
+    "d6": [
+      "devit",
+      "ចុះខ្ញុំនឹងកែកូដឱ្យលឿនជាងមុន!",
+      "And I'll make the code faster!"
+    ],
+    "n5": [
+      "narrator",
+      "ក្នុងរយៈពេលតែពីរម៉ោង កម្មវិធីបានដំណើរការឡើងវិញ",
+      "In just two hours, the app was running again,"
+    ],
+    "n6": [
+      "narrator",
+      "ហើយអតិថិជនរាប់ពាន់នាក់បានកុម្ម៉ង់ម្ហូបដោយរលូន។",
+      "and thousands of customers ordered food smoothly."
+    ],
+    "d7": [
+      "devit",
+      "បងនិមិត្ត ខ្ញុំយល់ហើយ។",
+      "Bong Nimith, I understand now."
+    ],
+    "d8": [
+      "devit",
+      "ល្បឿនសំខាន់ ប៉ុន្តែផែនការល្អក៏សំខាន់ដែរ។",
+      "Speed matters, but a good plan matters too."
+    ],
+    "m7": [
+      "nimith",
+      "ហើយគំនិតល្អ ត្រូវការអ្នកដែលហ៊ានសរសេរវាឱ្យក្លាយជាការពិត។",
+      "And good ideas need someone brave enough to write them into reality."
+    ],
+    "s8": [
+      "smei",
+      "នេះហើយជាមេរៀនដែលបងចង់ឱ្យប្អូនៗរៀន។",
+      "This is the lesson I wanted you both to learn."
+    ],
+    "s9": [
+      "smei",
+      "Developer នាំមកនូវល្បឿន និងការច្នៃប្រឌិត។",
+      "Developers bring speed and creativity."
+    ],
+    "s10": [
+      "smei",
+      "Engineer នាំមកនូវរចនាសម្ព័ន្ធ និងស្ថិរភាព។",
+      "Engineers bring structure and stability."
+    ],
+    "s11": [
+      "smei",
+      "នៅពេលធ្វើការជាមួយគ្នា អ្វីៗទាំងអស់អាចទៅរួច។",
+      "When we work together, anything is possible."
+    ]
+  },
+  "seeds": {
+    "s5": 22
+  }
+}

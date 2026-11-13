@@ -1,0 +1,8 @@
+{
+  "name": "video",
+  "version": "1.0.0",
+  "description": "Videos of 1 minute and up, drawn in code with Khmer or English voices: 2D comedy and story cartoons, Khmer chibi folk tales, paper-cut Cambodian history documentaries, remembrance documentaries, flat science / history explainers and 3D kids' learning episodes.",
+  "author": { "name": "chydevit" },
+  "homepage": "https://github.com/chydevit/Skill-create-videos",
+  "keywords": ["video", "long-form", "cartoon", "animation", "documentary", "explainer", "kids", "khmer", "cambodia"]
+}

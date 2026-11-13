@@ -1,0 +1,21 @@
+{
+  "name": "cartoon",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "stills": "node src/render.mjs stills",
+    "sheet": "node src/sheet.mjs",
+    "voices": "sh voices/run.sh",
+    "video": "node src/render.mjs video",
+    "audio": "node src/audio.mjs",
+    "mux": "node src/build.mjs mux",
+    "qc": "node src/build.mjs qc",
+    "build": "node src/vox.mjs && node src/render.mjs video && node src/audio.mjs && ([ -f src/cover.mjs ] && node src/cover.mjs || true) && node src/build.mjs mux && node src/build.mjs qc",
+    "durations": "node src/vox.mjs",
+    "asr": "sh voices/run.sh --asr",
+    "cover": "node src/cover.mjs"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "^1.0.13"
+  }
+}

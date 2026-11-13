@@ -1,0 +1,16 @@
+{
+  "lang": "km",
+  "translation": "en",
+  "voices": {
+    "benny": {
+      "seed": 2101,
+      "design": "A nervous, jittery Cambodian man in his thirties, short and chubby, slightly high-pitched shaky voice, speaks fast and anxiously",
+      "sample": "ខ្ញុំ... ខ្ញុំខ្លាចណាស់បង។ ប៉ូលិសមកហើយ! យើងត្រូវរត់ឥឡូវនេះ!",
+      "gain": 0.95, "pan": 0
+    }
+  },
+  "lines": {
+    "v_starter_yelp": ["benny", "ម៉ែអើយ!", "Oh, mother!"]
+  },
+  "seeds": {}
+}

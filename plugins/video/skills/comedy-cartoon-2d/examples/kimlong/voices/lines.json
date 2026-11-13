@@ -1,0 +1,507 @@
+{
+ "lang": "km",
+ "translation": "en",
+ "voices": {
+  "narrator": {
+   "seed": 3101,
+   "gain": 0.9,
+   "pan": 0,
+   "design": "A warm, friendly Cambodian storyteller narrating a short animated film, clear natural mid-range voice, calm pleasant pace",
+   "sample": "នៅក្នុងទីក្រុងដ៏ស្រស់ស្អាតមួយ មានរឿងរ៉ាវតូចមួយ ដែលយើងចង់ប្រាប់អ្នក។"
+  },
+  "david": {
+   "seed": 4303,
+   "gain": 0.95,
+   "pan": 0,
+   "design": "A curious, eager young Cambodian man around twenty, youthful slightly higher-pitched lively voice, excited to learn",
+   "sample": "ពិតមែនហើយ? ខ្ញុំចង់សាកល្បងដែរ! បង្រៀនខ្ញុំផង។"
+  },
+  "smey": {
+   "seed": 4101,
+   "gain": 0.95,
+   "pan": 0,
+   "design": "A kind Cambodian man in his early thirties, warm medium voice that sounds a little tired after a long day, gentle and polite",
+   "sample": "ថ្ងៃនេះធ្វើការច្រើនណាស់ ប៉ុន្តែមិនអីទេ យើងនឹងធ្វើវាបាន។"
+  },
+  "nimith": {
+   "seed": 4202,
+   "gain": 0.95,
+   "pan": 0,
+   "design": "A friendly, confident Cambodian man in his late twenties, clear bright medium voice, upbeat and reassuring, explains things simply",
+   "sample": "មិនពិបាកទេបង ខ្ញុំបង្ហាញឲ្យមើល វាងាយស្រួលណាស់។"
+  },
+  "leanghak": {
+   "seed": 5101,
+   "gain": 0.95,
+   "pan": 0,
+   "design": "A warm, gentle Cambodian woman in her mid thirties, soft clear medium voice, a little nervous but kind and polite",
+   "sample": "សួស្ដីបង ខ្ញុំរីករាយណាស់ដែលបានស្គាល់។ ថ្ងៃនេះខ្ញុំនឹងព្យាយាមឲ្យអស់ពីសមត្ថភាព។"
+  },
+  "pisey": {
+   "seed": 6101,
+   "gain": 0.95,
+   "pan": 0,
+   "design": "A gentle, warm Cambodian woman in her mid forties, soft kind motherly voice, a little shy and polite",
+   "sample": "សួស្ដីប្អូនៗ បងរីករាយណាស់ដែលបានស្គាល់។ បងនឹងខិតខំធ្វើការឲ្យបានល្អ។"
+  },
+  "sopheak": {
+   "seed": 7101,
+   "gain": 0.95,
+   "pan": 0,
+   "design": "A polite, calm Cambodian young man of nineteen, soft clear youthful voice, a little shy but earnest and respectful, speaks gently",
+   "sample": "ជម្រាបសួរបង ខ្ញុំឈ្មោះសុភ័ក្រ។ ខ្ញុំនឹងខិតខំរៀនឲ្យបានល្អបាទ។"
+  },
+  "professor": {
+   "seed": 8101,
+   "gain": 0.92,
+   "pan": 0,
+   "design": "A kind but serious Cambodian university professor in his late fifties, deep calm authoritative voice, clear and measured pace",
+   "sample": "សួស្ដីសិស្សទាំងអស់គ្នា។ ថ្ងៃនេះយើងនឹងរៀនមេរៀនថ្មីមួយ ដែលសំខាន់ណាស់។"
+  },
+  "kimlong": {
+   "seed": 9101,
+   "gain": 0.95,
+   "pan": 0,
+   "design": "A loud, playful, cheeky Cambodian young man of nineteen, bright energetic slightly husky voice, fast and full of jokes, confident and charming",
+   "sample": "ជម្រាបសួរបងៗ! ខ្ញុំឈ្មោះគីមឡុង ថ្ងៃនេះខ្ញុំសប្បាយចិត្តខ្លាំងណាស់!"
+  },
+  "channy": {
+   "seed": 9201,
+   "gain": 0.95,
+   "pan": 0,
+   "design": "A calm, elegant Cambodian young woman of twenty-two, soft clear cool voice, polite and composed, speaks slowly with quiet confidence",
+   "sample": "សួស្ដីបង នេះជាឯកសារដែលបងស្រីផ្ញើមក សូមពិនិត្យមើលផងចាស។"
+  },
+  "sreyneang": {
+   "seed": 9301,
+   "gain": 0.95,
+   "pan": 0,
+   "design": "A witty, cheerful Cambodian young woman of twenty-one working as a restaurant waitress, bright quick playful voice with a teasing tone",
+   "sample": "ចាស ប្អូនៗ ថ្ងៃនេះចង់ញ៉ាំអីដែរ? ម្ហូបយើងឆ្ងាញ់ណាស់!"
+  }
+ },
+ "fx": {
+  "g10": "thought",
+  "c12": "thought"
+ },
+ "lines": {
+  "n1a": [
+   "narrator",
+   "ព្រឹកនេះ Office របស់បងស្មី នឹងមានសមាជិកថ្មីម្នាក់...",
+   "This morning, Bong Smey's office is getting a new member...",
+   "ព្រឹកនេះ អូហ្វីស របស់បងស្មី នឹងមានសមាជិកថ្មីម្នាក់..."
+  ],
+  "n1b": [
+   "narrator",
+   "តែមុននឹងគាត់ចូល Office គាត់ជួបរឿងសំខាន់មួយសិន...",
+   "But before he walks into the office, he runs into something important...",
+   "តែមុននឹងគាត់ចូល អូហ្វីស គាត់ជួបរឿងសំខាន់មួយសិន..."
+  ],
+  "g1a": [
+   "kimlong",
+   "ជម្រាបសួរបងស្រីស្អាត!",
+   "Hello, beautiful!"
+  ],
+  "g1b": [
+   "kimlong",
+   "ថ្ងៃនេះព្រះអាទិត្យរះពីរ ម្ខាងនៅលើមេឃ ម្ខាងទៀតនៅចំពោះមុខខ្ញុំ!",
+   "Two suns rose today: one in the sky, and one right in front of me!"
+  ],
+  "c1a": [
+   "channy",
+   "...ប្អូនអាយុប៉ុន្មាន?",
+   "...How old are you?",
+   "ប្អូនអាយុប៉ុន្មាន?"
+  ],
+  "g1c": [
+   "kimlong",
+   "១៩ ឆ្នាំបាទ!",
+   "Nineteen!",
+   "ដប់ប្រាំបួន ឆ្នាំបាទ!"
+  ],
+  "c1b": [
+   "channy",
+   "ទៅធ្វើការទៅប្អូន។",
+   "Off to work you go, little brother."
+  ],
+  "g2a": [
+   "kimlong",
+   "ជម្រាបសួរ!!! អរុណសួស្ដីគ្រប់គ្នា!!!",
+   "Hello!!! Good morning, everyone!!!",
+   "ជម្រាបសួរ! អរុណសួស្ដីគ្រប់គ្នា!"
+  ],
+  "g2b": [
+   "kimlong",
+   "ខ្ញុំឈ្មោះគីមឡុង!!!",
+   "My name is Kimlong!!!",
+   "ខ្ញុំឈ្មោះគីមឡុង!"
+  ],
+  "m2": [
+   "nimith",
+   "អូយ! សំឡេងខ្លាំងម៉្លេះ!",
+   "Whoa! So loud!"
+  ],
+  "s2": [
+   "smey",
+   "ស្វាគមន៍គីមឡុង! សមាជិកថ្មីរបស់យើង អ្នកថតវីដេអូ!",
+   "Welcome, Kimlong! Our new member, the videographer!"
+  ],
+  "g3a": [
+   "kimlong",
+   "រីករាយណាស់ដែលបានស្គាល់!",
+   "So nice to meet you!"
+  ],
+  "g3b": [
+   "kimlong",
+   "បងស្មី! បងនិមិត្ត! បងដេវីត!",
+   "Bong Smey! Bong Nimith! Bong David!"
+  ],
+  "d3": [
+   "david",
+   "អូយ... ដៃបង... រីករាយ... ដែល... ស្គាល់... ប្អូន...",
+   "Oof... my hand... nice... to... meet... you..."
+  ],
+  "g3c": [
+   "kimlong",
+   "ហើយនេះ... បង...?",
+   "And this is... bong...?"
+  ],
+  "k3a": [
+   "sopheak",
+   "ខ្ញុំសុភ័ក្រ អាយុ ១៩ ឆ្នាំ។",
+   "I'm Sopheak, nineteen years old.",
+   "ខ្ញុំសុភ័ក្រ អាយុ ដប់ប្រាំបួន ឆ្នាំ។"
+  ],
+  "g3d": [
+   "kimlong",
+   "ហ្អេ! ១៩ ដូចគ្នា! អញ្ចឹងហៅឈ្មោះគ្នាបានហើយ សុភ័ក្រ!",
+   "Eh! Nineteen, same as me! Then we can use each other's names, Sopheak!",
+   "ហ្អេ! ដប់ប្រាំបួន ដូចគ្នា! អញ្ចឹងហៅឈ្មោះគ្នាបានហើយ សុភ័ក្រ!"
+  ],
+  "k3b": [
+   "sopheak",
+   "អូខេ គីមឡុង!",
+   "OK, Kimlong!"
+  ],
+  "g4a": [
+   "kimlong",
+   "បងៗ! Office ខាងនោះ បងស្រីសក់វែងម្នាក់នោះ ឈ្មោះអី?",
+   "Guys! The office next door, the girl with the long hair, what's her name?",
+   "បងៗ! អូហ្វីស ខាងនោះ បងស្រីសក់វែងម្នាក់នោះ ឈ្មោះអី?"
+  ],
+  "g4b": [
+   "kimlong",
+   "មានសង្សារហើយឬនៅ?",
+   "Does she have a boyfriend?"
+  ],
+  "g4c": [
+   "kimlong",
+   "គាត់ចូលចិត្តផឹកកាហ្វេឬតែ?",
+   "Does she like coffee or tea?"
+  ],
+  "s4": [
+   "smey",
+   "ប្អូន... ទើបមកដល់ ៥ នាទីសោះ!",
+   "Kid... you've only been here five minutes!",
+   "ប្អូន... ទើបមកដល់ ប្រាំ នាទីសោះ!"
+  ],
+  "d4": [
+   "david",
+   "ហាហា! Office យើងមានស្ដេចញ៉ែហើយ!",
+   "Haha! Our office has a King of Flirting now!",
+   "ហាហា! អូហ្វីស យើងមានស្ដេចញ៉ែហើយ!"
+  ],
+  "k5a": [
+   "sopheak",
+   "គីមឡុង! តុឯងនៅក្បែរតុខ្ញុំនេះ។",
+   "Kimlong! Your desk is right here next to mine."
+  ],
+  "k5b": [
+   "sopheak",
+   "មានអីមិនច្បាស់ សួរខ្ញុំបាន!",
+   "If anything's unclear, just ask me!"
+  ],
+  "g5a": [
+   "kimlong",
+   "អរគុណសុភ័ក្រ!",
+   "Thanks, Sopheak!"
+  ],
+  "g5b": [
+   "kimlong",
+   "មើលនេះគ្រប់គ្នា វីដេអូ Office យើងក្នុង ៣០ វិនាទី!",
+   "Look, everyone: our office in a thirty-second video!",
+   "មើលនេះគ្រប់គ្នា វីដេអូ អូហ្វីស យើងក្នុង សាមសិប វិនាទី!"
+  ],
+  "m5": [
+   "nimith",
+   "វ៉ាវ! ញ៉ែស្រីមិនពូកែ តែថតវីដេអូពូកែមែន!",
+   "Wow! Bad at flirting, but really good at filming!"
+  ],
+  "g6a": [
+   "kimlong",
+   "បងស្រីរត់តុ!",
+   "Excuse me, miss!"
+  ],
+  "g6b": [
+   "kimlong",
+   "ខ្ញុំមិនបាច់ហៅម្ហូបទេ ព្រោះមើលមុខបងស្រី ខ្ញុំឆ្អែតហើយ!",
+   "I don't need to order. Just looking at your face fills me up!"
+  ],
+  "y6a": [
+   "sreyneang",
+   "អូខេ! អញ្ចឹងប្អូនមិនបាច់ញ៉ាំទេណា",
+   "OK! Then you don't need to eat,"
+  ],
+  "y6b": [
+   "sreyneang",
+   "ម្ហូបរបស់ប្អូន បងឲ្យទៅអ្នកផ្សេង!",
+   "I'll give your food to someone else!"
+  ],
+  "g6c": [
+   "kimlong",
+   "អូយ! ទេ! ទេ! ខ្ញុំឃ្លានណាស់បងស្រី!",
+   "Oh no! No! No! I'm starving, miss!"
+  ],
+  "k6": [
+   "sopheak",
+   "ហាហា! គីមឡុង ឯងញ៉ែមិនកើតទេ!",
+   "Haha! Kimlong, your flirting doesn't work!"
+  ],
+  "l7": [
+   "leanghak",
+   "ក្មេងនេះ! មកដល់ថ្ងៃដំបូង ញ៉ែស្រីពីរនាក់ហើយ!",
+   "This kid! First day here and he's already flirted with two girls!"
+  ],
+  "p7": [
+   "pisey",
+   "ក្មួយ! ញ៉ែស្រីត្រូវគួរសម កុំឲ្យគេរំខានណា!",
+   "Nephew! If you flirt, be polite. Don't bother people!"
+  ],
+  "g7a": [
+   "kimlong",
+   "បាទបងស្រី បាទបងពិសី!",
+   "Yes, bong srey! Yes, Bong Pisey!"
+  ],
+  "g7b": [
+   "kimlong",
+   "ខ្ញុំនិយាយលេងតែប៉ុណ្ណោះ ខ្ញុំគោរពគេណាស់!",
+   "I'm only joking. I really respect them!"
+  ],
+  "g8a": [
+   "kimlong",
+   "សុភ័ក្រ! ឯងការពារខាងឆ្វេង ខ្ញុំវាយខាងស្ដាំ!",
+   "Sopheak! You defend the left, I'll attack the right!"
+  ],
+  "k8": [
+   "sopheak",
+   "យល់ហើយ គីមឡុង!",
+   "Got it, Kimlong!"
+  ],
+  "g8b": [
+   "kimlong",
+   "ស្ងប់ៗ... ស្ងប់ៗ... រួចហើយ!",
+   "Calm... calm... done!"
+  ],
+  "l8a": [
+   "leanghak",
+   "ស្អី?! បងចាញ់?!",
+   "What?! I lost?!"
+  ],
+  "l8b": [
+   "leanghak",
+   "បងមិនដែលចាញ់ផង!",
+   "I never lose!"
+  ],
+  "d8": [
+   "david",
+   "គូសុភ័ក្រ និងគីមឡុង ខ្លាំងពេកហើយ!",
+   "The Sopheak and Kimlong team is too strong!"
+  ],
+  "c9": [
+   "channy",
+   "បងស្មី នេះឯកសារពីបងស្រីលាងហាក់ចាស។",
+   "Bong Smey, here are the documents from Bong Srey Leanghak."
+  ],
+  "g9a": [
+   "kimlong",
+   "អូ៎! បងស្រីព្រះអាទិត្យ!",
+   "Oh! Miss Sunshine!"
+  ],
+  "g9b": [
+   "kimlong",
+   "យើងជួបគ្នាម្ដងទៀតហើយ! នេះជាវាសនា!",
+   "We meet again! It's destiny!"
+  ],
+  "k9": [
+   "sopheak",
+   "អហឹម! អហឹម! គីមឡុង ឯងចាញ់ទៀតហើយ!",
+   "Ahem! Ahem! Kimlong, you lost again!"
+  ],
+  "m9": [
+   "nimith",
+   "ហាហា! ចាញ់ហ្គេមមិនដែល តែចាញ់ស្នេហារហូត!",
+   "Haha! Never loses at games, always loses at love!"
+  ],
+  "d10a": [
+   "david",
+   "ជម្រាបសួរលោកសាស្ត្រាចារ្យ... ថ្ងៃនេះខ្ញុំ...",
+   "Good afternoon, professor... today I..."
+  ],
+  "d10b": [
+   "david",
+   "អូយ ភ្លេចទៀតហើយ... ខ្ញុំធ្វើមិនកើតទេ...",
+   "Oh no, I forgot again... I can't do this..."
+  ],
+  "g10": [
+   "kimlong",
+   "លេងសើចល្មមហើយ... បងដេវីត ត្រូវការជំនួយហើយ...",
+   "Enough joking... Bong David needs help..."
+  ],
+  "g11a": [
+   "kimlong",
+   "បងដេវីត! មកនេះ! ហាត់ការពារសារណានៅទីនេះ ខ្ញុំថតឲ្យ។",
+   "Bong David! Come here! Practise your defence here, and I'll film you."
+  ],
+  "g11b": [
+   "kimlong",
+   "បងស្មី បងនិមិត្ត សុភ័ក្រ អង្គុយធ្វើជាសាស្ត្រាចារ្យ!",
+   "Bong Smey, Bong Nimith, Sopheak: sit down and be the professors!"
+  ],
+  "s11": [
+   "smey",
+   "គំនិតល្អណាស់គីមឡុង!",
+   "Great idea, Kimlong!"
+  ],
+  "d12a": [
+   "david",
+   "ជម្រាបសួរលោកសាស្ត្រាចារ្យ និងគណៈកម្មការ។",
+   "Good afternoon, professors and committee members."
+  ],
+  "d12b": [
+   "david",
+   "ប្រធានបទសារណារបស់ខ្ញុំគឺ...",
+   "The topic of my thesis is..."
+  ],
+  "m12": [
+   "nimith",
+   "ហេតុអ្វីបានជាអូនជ្រើសរើសប្រធានបទនេះ?",
+   "Why did you choose this topic?"
+  ],
+  "c12": [
+   "channy",
+   "ក្មេងនោះ... ពេលធ្វើការ មើលទៅធ្ងន់ធ្ងរដែរ...",
+   "That kid... when he works, he actually looks serious..."
+  ],
+  "g13a": [
+   "kimlong",
+   "មើលនេះបងដេវីត! ពេលបងភ័យ បងមើលតែក្រដាស។",
+   "Look, Bong David! When you're nervous, you only look at your papers."
+  ],
+  "g13b": [
+   "kimlong",
+   "សាកមើលមុខអ្នកស្ដាប់ ហើយញញឹម។",
+   "Try looking at your audience, and smile."
+  ],
+  "g13c": [
+   "kimlong",
+   "ដូចខ្ញុំញ៉ែស្រីអញ្ចឹង ត្រូវមើលភ្នែក ហើយមានទំនុកចិត្ត!",
+   "Like when I flirt: look them in the eye and be confident!"
+  ],
+  "d13": [
+   "david",
+   "ហាហា! តែប្អូនញ៉ែស្រីមិនដែលបានសោះ!",
+   "Haha! But your flirting never works!"
+  ],
+  "k13": [
+   "sopheak",
+   "ត្រូវហើយបងដេវីត! គីមឡុងចាញ់ ៣ ដងហើយថ្ងៃនេះ!",
+   "That's right, Bong David! Kimlong has lost three times today!",
+   "ត្រូវហើយបងដេវីត! គីមឡុងចាញ់ បី ដងហើយថ្ងៃនេះ!"
+  ],
+  "g13d": [
+   "kimlong",
+   "ហ្នឹងហើយ! ដូច្នេះបងត្រូវធ្វើឲ្យល្អជាងខ្ញុំ!",
+   "Exactly! So you have to do better than me!"
+  ],
+  "g14a": [
+   "kimlong",
+   "បងដេវីត សុភ័ក្រ! ទៅរៀនប្រយ័ត្នផ្លូវណា!",
+   "Bong David, Sopheak! Be careful on the road to school!"
+  ],
+  "c14a": [
+   "channy",
+   "ប្អូនគីមឡុង... ថតវីដេអូពូកែណាស់។",
+   "Kimlong... you're really good at filming."
+  ],
+  "c14b": [
+   "channy",
+   "ពេលក្រោយថតឲ្យក្រុមបងស្រីផងណា។",
+   "Next time, film something for my team too."
+  ],
+  "g14b": [
+   "kimlong",
+   "សុភ័ក្រ!!! បងស្រីព្រះអាទិត្យ ញញឹមដាក់ខ្ញុំហើយ!!!",
+   "Sopheak!!! Miss Sunshine smiled at me!!!",
+   "សុភ័ក្រ! បងស្រីព្រះអាទិត្យ ញញឹមដាក់ខ្ញុំហើយ!"
+  ],
+  "k14": [
+   "sopheak",
+   "ហាហា! អបអរសាទរ គីមឡុង!",
+   "Haha! Congratulations, Kimlong!"
+  ],
+  "g15a": [
+   "kimlong",
+   "តោះ! រូបថតគ្រួសារថ្មី! ៣... ២... ១...!",
+   "Come on! New family photo! Three... two... one...!",
+   "តោះ! រូបថតគ្រួសារថ្មី! បី... ពីរ... មួយ...!"
+  ],
+  "a15g": [
+   "kimlong",
+   "ម្នាក់ៗខុសគ្នា តែរួមគ្នាយើងខ្លាំង!",
+   "Each of us is different, but together we're strong!"
+  ],
+  "a15k": [
+   "sopheak",
+   "ម្នាក់ៗខុសគ្នា តែរួមគ្នាយើងខ្លាំង!",
+   "Each of us is different, but together we're strong!"
+  ],
+  "a15d": [
+   "david",
+   "ម្នាក់ៗខុសគ្នា តែរួមគ្នាយើងខ្លាំង!",
+   "Each of us is different, but together we're strong!"
+  ],
+  "a15s": [
+   "smey",
+   "ម្នាក់ៗខុសគ្នា តែរួមគ្នាយើងខ្លាំង!",
+   "Each of us is different, but together we're strong!"
+  ],
+  "a15m": [
+   "nimith",
+   "ម្នាក់ៗខុសគ្នា តែរួមគ្នាយើងខ្លាំង!",
+   "Each of us is different, but together we're strong!"
+  ],
+  "a15l": [
+   "leanghak",
+   "ម្នាក់ៗខុសគ្នា តែរួមគ្នាយើងខ្លាំង!",
+   "Each of us is different, but together we're strong!"
+  ],
+  "a15p": [
+   "pisey",
+   "ម្នាក់ៗខុសគ្នា តែរួមគ្នាយើងខ្លាំង!",
+   "Each of us is different, but together we're strong!"
+  ],
+  "g15b": [
+   "kimlong",
+   "ហើយខ្ញុំ... នៅតែជាស្ដេចញ៉ែ! 😉",
+   "And me... I'm still the King of Flirting!",
+   "ហើយខ្ញុំ... នៅតែជាស្ដេចញ៉ែ!"
+  ]
+ },
+ "seeds": {
+  "k3a": 21,
+  "m5": 21,
+  "l8a": 21,
+  "g11b": 21,
+  "g15b": 21
+ }
+}

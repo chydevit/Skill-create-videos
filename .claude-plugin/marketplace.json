@@ -1,24 +1,60 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "chydevit-skills",
-  "description": "Claude Code skills that make finished logo animations and promo videos entirely in code: animated logo reveals, SaaS / product promos, creator and developer intro reels, studio showreels and looping brand backgrounds.",
-  "owner": { "name": "chydevit" },
+  "description": "Claude Code skills that make finished videos entirely in code, in three categories: video (1 minute and up: cartoons, documentaries, explainers), motion graphics (short promos, intro reels, showreels, loops) and create logo (animated logo reveals).",
+  "owner": {
+    "name": "chydevit"
+  },
   "plugins": [
     {
-      "name": "logo-skills",
-      "description": "/generate-logo: turn any logo image into 5-second animated logo reveals in five styles (liquid, neon, bounce, lens, rise), with sound and transparent versions.",
-      "author": { "name": "chydevit" },
-      "source": "./plugins/logo-skills",
+      "name": "video",
+      "description": "Video, 1 min and up: /comedy-cartoon-2d (1-4 min comedy and story cartoons), /khmer-2d-animation (Khmer chibi folk tales and lessons), /khmer-history-doc (paper-cut history documentaries), /khmer-memory-doc (15 min remembrance documentaries), /flat-explainer-doc (flat science / history explainers), /kids-cartoon-video (3D kids' learning episodes).",
+      "author": {
+        "name": "chydevit"
+      },
+      "source": "./plugins/video",
       "category": "design",
-      "homepage": "https://github.com/chydevit/Skill-create-videos"
+      "homepage": "https://github.com/chydevit/Skill-create-videos",
+      "tags": [
+        "video",
+        "long-form",
+        "cartoon",
+        "documentary",
+        "explainer",
+        "khmer"
+      ]
     },
     {
-      "name": "video-skills",
-      "description": "/saas-promo (11 s or 50 s beat-synced product promos), /portfolio-reel (30 s creator / developer intro reels, classic or app UI, 5 colour styles), /brand-promo (50 s studio showreels with narration) and /brand-loop (seamless 4K liquid backgrounds).",
-      "author": { "name": "chydevit" },
-      "source": "./plugins/video-skills",
+      "name": "motion-graphics",
+      "description": "Motion graphics, under 1 min: /portfolio-reel (30 s creator / developer intro reels, classic or app UI, 5 styles), /saas-promo (11 s product promos, or 50 s cut on the beat of your song), /brand-promo (50 s studio showreels with narration), /brand-loop (seamless 4K looping backgrounds).",
+      "author": {
+        "name": "chydevit"
+      },
+      "source": "./plugins/motion-graphics",
       "category": "design",
-      "homepage": "https://github.com/chydevit/Skill-create-videos"
+      "homepage": "https://github.com/chydevit/Skill-create-videos",
+      "tags": [
+        "motion-graphics",
+        "promo",
+        "portfolio",
+        "showreel",
+        "background"
+      ]
+    },
+    {
+      "name": "create-logo",
+      "description": "Create logo: /generate-logo turns any logo image into 5-second animated logo reveals in five styles (liquid, neon, bounce, lens, rise), with sound and transparent versions.",
+      "author": {
+        "name": "chydevit"
+      },
+      "source": "./plugins/create-logo",
+      "category": "design",
+      "homepage": "https://github.com/chydevit/Skill-create-videos",
+      "tags": [
+        "logo",
+        "brand-identity",
+        "animation"
+      ]
     }
   ]
 }

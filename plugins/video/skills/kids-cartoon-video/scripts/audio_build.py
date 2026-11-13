@@ -1,0 +1,575 @@
+"""Voices, timeline and final audio mix.
+
+Run with Blender's bundled Python (it ships numpy):
+  <blender-python> audio_build.py <project_dir>
+Reads <project_dir>/script_data.py, writes <project_dir>/build/timeline.json and
+<project_dir>/build/final_audio.wav
+"""
+import hashlib
+import json
+import os
+import subprocess
+import sys
+import wave
+
+import numpy as np
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+PROJECT = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else ".")
+sys.path.insert(0, HERE)
+sys.path.insert(0, PROJECT)
+import script_data as SD  # noqa: E402
+import cartoon_dsl  # noqa: E402
+
+LANGUAGE = cartoon_dsl.current_language()
+EDGE_TTS = os.path.join(os.path.dirname(HERE), ".venv", "bin", "edge-tts")
+BUILD = os.path.join(PROJECT, "build")
+VO = os.path.join(BUILD, "vo")
+os.makedirs(VO, exist_ok=True)
+
+SR = 48000
+FPS = 24
+XFADE = 0.8        # scene transition overlap (seconds)
+LEAD = 0.9         # quiet time at the start of each scene
+TAIL = 1.2         # extra time after the last beat of a scene
+
+# English voices (macOS say): voice, words-per-minute, pitch factor
+VOICES = {
+    "narr": ("Samantha", 118, 1.00),
+    "milo": ("Daniel", 128, 1.30),
+    "luna": ("Samantha", 128, 1.24),
+    "bobo": ("Tessa", 145, 1.62),
+    "cat": ("Samantha", 150, 1.55),
+    "dog": ("Daniel", 170, 0.85),
+    "duck": ("Tessa", 170, 1.35),
+    "cow": ("Daniel", 110, 0.72),
+}
+# Khmer voices (edge-tts neural): voice, rate, pitch factor
+VOICES_KM = {
+    "narr": ("km-KH-SreymomNeural", "-12%", 1.00),
+    "milo": ("km-KH-PisethNeural", "-8%", 1.32),
+    "luna": ("km-KH-SreymomNeural", "-8%", 1.20),
+    "bobo": ("km-KH-SreymomNeural", "+0%", 1.55),
+    "cat": ("km-KH-SreymomNeural", "+0%", 1.50),
+    "dog": ("km-KH-PisethNeural", "+5%", 0.85),
+    "duck": ("km-KH-SreymomNeural", "+5%", 1.30),
+    "cow": ("km-KH-PisethNeural", "-20%", 0.72),
+}
+GROUPS = {"all": ["milo", "luna", "bobo"], "ml": ["milo", "luna"]}
+
+# Khmer engine: VoxCPM2 (default when its venv exists) or edge-tts (KM_ENGINE=edge).
+# VoxCPM2 runs locally through the khmer-2d-animation skill's .venv-vox and worker.
+KH2D = os.path.expanduser("~/.claude/skills/khmer-2d-animation")
+VOX_PY = os.path.join(KH2D, ".venv-vox", "bin", "python")
+VOX_WORKER = os.path.join(KH2D, "scripts", "tts_vox.py")
+KM_ENGINE = os.environ.get("KM_ENGINE") or ("voxcpm" if os.path.exists(VOX_PY) else "edge")
+VOX_SAMPLE = ("សួស្តី ខ្ញុំរីករាយណាស់ដែលបានជួបអ្នក។ "
+              "ថ្ងៃនេះអាកាសធាតុល្អណាស់ ហើយយើងនឹងលេងជាមួយគ្នា។")
+# Each role gets one designed reference clip (locked in build/vo/voices/<who>.wav);
+# every line of that role is cloned from it. design, seed, speed (atempo), pitch factor
+VOICES_VOX = {
+    "narr": ("A warm, gentle Cambodian female kindergarten teacher, clear and slow Khmer, "
+             "friendly and encouraging", 701, 0.92, 1.00),
+    "milo": ("A cheerful little Cambodian boy about seven years old, bright high youthful "
+             "voice, playful", 702, 0.95, 1.06),
+    "luna": ("A sweet little Cambodian girl about seven years old, high clear youthful "
+             "voice, kind and smart", 703, 0.95, 1.06),
+    "bobo": ("A tiny cute cartoon bird, very high squeaky playful voice, fast and silly",
+             704, 1.0, 1.28),
+    "cat": ("A cute small kitten character, soft high sweet voice", 705, 1.0, 1.15),
+    "dog": ("A happy playful puppy character, energetic voice", 706, 1.0, 0.95),
+    "duck": ("A funny cartoon duck character, nasal quacky voice", 707, 1.0, 1.1),
+    "cow": ("A big gentle cow character, slow deep low voice", 708, 0.9, 0.8),
+}
+VOX_DIR = os.path.join(VO, "voices")
+
+
+# ------------------------------------------------------------------ helpers
+def read_wav(path):
+    with wave.open(path) as w:
+        data = np.frombuffer(w.readframes(w.getnframes()), dtype=np.int16)
+    return data.astype(np.float32) / 32768.0
+
+
+def write_wav(path, x):
+    x = np.clip(x, -1, 1)
+    if x.ndim == 1:
+        x = np.stack([x, x], axis=1)
+    with wave.open(path, "wb") as w:
+        w.setnchannels(2)
+        w.setsampwidth(2)
+        w.setframerate(SR)
+        w.writeframes((x * 32767).astype(np.int16).tobytes())
+
+
+def tts(who, text, rate=None, lang="en"):
+    if lang == "km" and KM_ENGINE == "voxcpm":
+        return read_wav(vox_out(who, text, rate))
+    if lang == "km":
+        voice, speed, pitch = VOICES_KM[who]
+        if rate:
+            speed = rate if isinstance(rate, str) else "%+d%%" % int(rate)
+        tag = f"edge|{voice}|{speed}|{pitch}|{text}"
+    else:
+        voice, wpm, pitch = VOICES[who]
+        wpm = rate or wpm
+        tag = f"{voice}|{wpm}|{pitch}|{text}"
+    key = hashlib.md5(tag.encode()).hexdigest()[:12]
+    out = os.path.join(VO, f"{who}_{lang}_{key}.wav")
+    if not os.path.exists(out):
+        aiff = out[:-4] + (".mp3" if lang == "km" else ".aiff")
+        if lang == "km":
+            for attempt in range(4):  # the online service sometimes drops a request
+                r = subprocess.run([EDGE_TTS, "--voice", voice, f"--rate={speed}",
+                                    "--text", text, "--write-media", aiff])
+                if r.returncode == 0 and os.path.exists(aiff):
+                    break
+            else:
+                raise RuntimeError("edge-tts failed for: " + text)
+        else:
+            subprocess.run(["say", "-v", voice, "-r", str(wpm), "-o", aiff, text],
+                           check=True)
+        af = (f"aresample={SR},asetrate={SR}*{pitch},aresample={SR},"
+              f"atempo={1 / pitch:.5f},"
+              "silenceremove=start_periods=1:start_threshold=-50dB,"
+              "areverse,silenceremove=start_periods=1:start_threshold=-50dB,"
+              "areverse,loudnorm=I=-18:TP=-2:LRA=11")
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", aiff, "-af", af,
+                        "-ar", str(SR), "-ac", "1", out], check=True)
+        os.remove(aiff)
+    return read_wav(out)
+
+
+def _vox_speed(who, rate):
+    speed = VOICES_VOX[who][2]
+    if rate:  # same "+20%" / "-10%" strings as edge-tts
+        r = rate if isinstance(rate, str) else "%+d%%" % int(rate)
+        speed *= 1 + int(r.strip("%")) / 100
+    return speed
+
+
+def vox_out(who, text, rate):
+    """Final processed wav for a VoxCPM2 line (made by vox_prepare)."""
+    design, seed, _, pitch = VOICES_VOX[who]
+    tag = f"vox|{design}|{seed}|{_vox_speed(who, rate):.3f}|{pitch}|{text}"
+    return os.path.join(VO, f"{who}_km_{hashlib.md5(tag.encode()).hexdigest()[:12]}.wav")
+
+
+def vox_prepare():
+    """Synthesise every missing Khmer line in one VoxCPM2 run (the model loads once)."""
+    os.makedirs(VOX_DIR, exist_ok=True)
+    jobs = {"voices": [], "lines": []}
+    todo = []
+    seen = set()
+    for sc in SD.SCENES:
+        for b in sc["beats"]:
+            if b["kind"] != "line" or b.get("lang") != "km":
+                continue
+            for m in GROUPS.get(b["who"], [b["who"]]):
+                out = vox_out(m, b["text"], b["rate"])
+                if os.path.exists(out) or out in seen:
+                    continue
+                seen.add(out)
+                design, seed, _, _ = VOICES_VOX[m]
+                raw_key = hashlib.md5(f"{m}|{design}|{seed}|{b['text']}".encode()).hexdigest()[:12]
+                raw = os.path.join(VO, "raw", f"{m}_{raw_key}.wav")
+                todo.append((m, b["rate"], raw, out))
+                if not os.path.exists(raw):
+                    jobs["lines"].append({"id": os.path.basename(raw), "text": b["text"],
+                                          "ref_wav": os.path.join(VOX_DIR, m + ".wav"),
+                                          "ref_text": VOX_SAMPLE, "out_wav": raw,
+                                          "seed": 7, "cfg": 2.0, "steps": 10,
+                                          "clone_mode": "ref"})
+    roles = {j["ref_wav"] for j in jobs["lines"]}
+    for who, (design, seed, _, _) in VOICES_VOX.items():
+        ref = os.path.join(VOX_DIR, who + ".wav")
+        if ref in roles and not os.path.exists(ref):
+            jobs["voices"].append({"voice_id": who, "design": design, "sample_text": VOX_SAMPLE,
+                                   "out_wav": ref, "seed": seed})
+    if jobs["lines"]:
+        path = os.path.join(VO, "vox_jobs.json")
+        with open(path, "w") as f:
+            json.dump(jobs, f, ensure_ascii=False)
+        print("VoxCPM2: %d voice(s), %d line(s) to synthesise..." %
+              (len(jobs["voices"]), len(jobs["lines"])), flush=True)
+        p = subprocess.Popen([VOX_PY, VOX_WORKER, path], stdout=subprocess.PIPE, text=True)
+        for line in p.stdout:
+            if line.startswith("{"):
+                print("  " + line.strip(), flush=True)
+        if p.wait() != 0:
+            raise RuntimeError("VoxCPM2 worker failed (try KM_ENGINE=edge)")
+    for who, rate, raw, out in todo:
+        pitch = VOICES_VOX[who][3]
+        tempo = _vox_speed(who, rate) / pitch
+        af = (f"aresample={SR},asetrate={SR}*{pitch},aresample={SR},atempo={tempo:.5f},"
+              "silenceremove=start_periods=1:start_threshold=-50dB,"
+              "areverse,silenceremove=start_periods=1:start_threshold=-50dB,"
+              "areverse,loudnorm=I=-18:TP=-2:LRA=11")
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", raw, "-af", af,
+                        "-ar", str(SR), "-ac", "1", out], check=True)
+
+
+def envelope(x):
+    hop = SR // FPS
+    n = int(np.ceil(len(x) / hop))
+    pad = np.zeros(n * hop, dtype=np.float32)
+    pad[:len(x)] = x
+    rms = np.sqrt((pad.reshape(n, hop) ** 2).mean(axis=1))
+    ref = np.percentile(rms[rms > 1e-4], 90) if np.any(rms > 1e-4) else 1
+    e = np.clip(rms / (ref + 1e-9), 0, 1.2)
+    e[e < 0.12] = 0
+    return [round(float(v), 3) for v in e]
+
+
+# ------------------------------------------------------------ timeline
+def parse_ev(ev):
+    if isinstance(ev[0], (int, float)):
+        return float(ev[0]), ev[1:]
+    return 0.0, ev
+
+
+def build_timeline():
+    scenes = []
+    voice_clips = []  # (scene_index, t, samples)
+    for si, sc in enumerate(SD.SCENES):
+        t = LEAD
+        events = []
+        for b in sc["beats"]:
+            if b["kind"] == "line":
+                members = GROUPS.get(b["who"], [b["who"]])
+                clips = {m: tts(m, b["text"], b["rate"], b.get("lang", "en"))
+                         for m in members}
+                n = max(len(c) for c in clips.values())
+                mix = np.zeros(n, dtype=np.float32)
+                for c in clips.values():
+                    mix[:len(c)] += c * (0.75 if len(members) > 1 else 1.0)
+                dur = n / SR
+                voice_clips.append((si, t, mix))
+                events.append({"t": round(t, 3), "type": "speech",
+                               "who": b["who"], "members": members,
+                               "lang": b.get("lang", "en"),
+                               "text": b["text"], "cap": b["cap"],
+                               "dur": round(dur, 3),
+                               "env": {m: envelope(c) for m, c in clips.items()}})
+                beat_dur = dur + b["gap"]
+            else:
+                beat_dur = b["dur"]
+                if b["kind"] == "pause":
+                    events.append({"t": round(t, 3), "type": "turn",
+                                   "dur": beat_dur, "show": b["turn"]})
+            for ev in b["ev"]:
+                off, e = parse_ev(ev)
+                events.append({"t": round(t + off, 3), "type": e[0],
+                               "args": list(e[1:])})
+            t += beat_dur
+        dur = t + TAIL
+        scenes.append({"name": sc["name"], "set": sc.get("set", sc["name"]),
+                       "dur": round(dur, 3),
+                       "frames": int(round(dur * FPS)), "target": sc["target"],
+                       "events": events})
+    # global start of every scene (they overlap by XFADE)
+    start = 0.0
+    for s in scenes:
+        s["frames_dur"] = s["frames"] / FPS
+        s["start"] = round(start, 4)
+        start += s["frames_dur"] - XFADE
+    total = start + XFADE
+    return scenes, voice_clips, total
+
+
+# ---------------------------------------------------------------- synth
+rng = np.random.default_rng(7)
+
+
+def tvec(d):
+    return np.arange(int(d * SR)) / SR
+
+
+def adsr(n, a=0.005, r=0.2):
+    t = np.arange(n) / SR
+    env = np.minimum(1, t / max(a, 1e-4)) * np.exp(-t / r)
+    return env
+
+
+def bandnoise(d, lo, hi):
+    n = int(d * SR)
+    x = rng.standard_normal(n)
+    f = np.fft.rfft(x)
+    fr = np.fft.rfftfreq(n, 1 / SR)
+    f[(fr < lo) | (fr > hi)] = 0
+    y = np.fft.irfft(f, n)
+    return y / (np.abs(y).max() + 1e-9)
+
+
+def bell(freq, d=1.2, decay=0.35):
+    t = tvec(d)
+    y = (np.sin(2 * np.pi * freq * t) + 0.35 * np.sin(2 * np.pi * freq * 2.76 * t)
+         * np.exp(-t / (decay * 0.3)) + 0.2 * np.sin(2 * np.pi * freq * 5.4 * t)
+         * np.exp(-t / (decay * 0.15)))
+    return y * adsr(len(t), 0.002, decay)
+
+
+def note_freq(midi):
+    return 440.0 * 2 ** ((midi - 69) / 12)
+
+
+def sfx(name):
+    if name == "pop":
+        t = tvec(0.12)
+        f = 900 * np.exp(-t * 18) + 250
+        return 0.5 * np.sin(2 * np.pi * np.cumsum(f) / SR) * adsr(len(t), 0.002, 0.04)
+    if name == "boing":
+        t = tvec(0.6)
+        f = 180 + 320 * (1 - np.exp(-t * 8)) + 40 * np.sin(2 * np.pi * 14 * t)
+        return 0.45 * np.sin(2 * np.pi * np.cumsum(f) / SR) * adsr(len(t), 0.005, 0.22)
+    if name in ("birds", "birds_soft"):
+        n_ch = 7 if name == "birds" else 3
+        out = np.zeros(int(3.2 * SR))
+        for _ in range(n_ch):
+            st = rng.uniform(0, 2.6)
+            for k in range(rng.integers(2, 4)):
+                t = tvec(0.09)
+                f0 = rng.uniform(2600, 3600)
+                f = f0 + 1400 * np.sin(np.pi * t / 0.09) * rng.choice([1, -0.5])
+                ch = np.sin(2 * np.pi * np.cumsum(f) / SR) * np.sin(np.pi * t / 0.09)
+                i = int((st + k * 0.12) * SR)
+                out[i:i + len(ch)] += ch[:len(out) - i] * 0.13
+        return out
+    if name == "tweet":
+        out = np.zeros(int(0.5 * SR))
+        for k in range(2):
+            t = tvec(0.12)
+            f = 3000 + 1500 * t / 0.12
+            ch = np.sin(2 * np.pi * np.cumsum(f) / SR) * np.sin(np.pi * t / 0.12)
+            i = int(k * 0.17 * SR)
+            out[i:i + len(ch)] += ch * 0.25
+        return out
+    if name == "flutter":
+        t = tvec(1.3)
+        am = 0.5 + 0.5 * np.sign(np.sin(2 * np.pi * 13 * t))
+        return 0.28 * bandnoise(1.3, 300, 2500) * am * np.sin(np.pi * t / 1.3)
+    if name == "door":
+        t = tvec(1.0)
+        f = 190 + 120 * t + 25 * np.sin(2 * np.pi * 7 * t)
+        creak = np.sign(np.sin(2 * np.pi * np.cumsum(f) / SR)) * 0.07
+        creak *= np.sin(np.pi * np.clip(t / 0.8, 0, 1))
+        return creak
+    if name == "sparkle":
+        out = np.zeros(int(1.6 * SR))
+        for k, m in enumerate([84, 88, 91, 96, 100]):
+            b = bell(note_freq(m), 1.0, 0.3) * 0.16
+            i = int(k * 0.08 * SR)
+            out[i:i + len(b)] += b[:len(out) - i]
+        return out
+    if name == "correct":
+        out = np.zeros(int(1.4 * SR))
+        for k, m in enumerate([72, 76, 79, 84]):
+            b = bell(note_freq(m), 1.0, 0.4) * 0.2
+            i = int(k * 0.1 * SR)
+            out[i:i + len(b)] += b[:len(out) - i]
+        return out
+    if name == "bell":
+        out = np.zeros(int(1.3 * SR))
+        for k in range(2):
+            b = bell(note_freq(88), 0.9, 0.3) * 0.25
+            i = int(k * 0.25 * SR)
+            out[i:i + len(b)] += b[:len(out) - i]
+        return out
+    if name == "claps":
+        out = np.zeros(int(2.7 * SR))
+        for k in range(6):
+            c = bandnoise(0.08, 800, 5000) * adsr(int(0.08 * SR), 0.001, 0.02) * 0.35
+            i = int((0.1 + k * 0.42) * SR)
+            out[i:i + len(c)] += c
+        return out
+    if name == "step":
+        return bandnoise(0.07, 80, 700) * adsr(int(0.07 * SR), 0.002, 0.02) * 0.12
+    if name == "whoosh":
+        d = 0.9
+        t = tvec(d)
+        x = bandnoise(d, 400, 4000) * np.sin(np.pi * t / d) ** 2 * 0.18
+        return x
+    if name == "kids":
+        return sfx("birds")
+    if name == "yawn":
+        return tts("bobo", "Aaaah... hmmm.", 120) * 0.9
+    raise ValueError(name)
+
+
+# ---------------------------------------------------------------- music
+BPM = 112
+BEAT = 60 / BPM
+PROG = [(48, [60, 64, 67]), (43, [59, 62, 67]), (45, [60, 64, 69]),
+        (41, [60, 65, 69])]
+MELODY = [  # (beat offset in 4-bar phrase, midi, beats)
+    (0, 76, 1), (1, 79, 1), (2, 81, 0.5), (2.5, 79, 0.5), (3, 76, 1),
+    (4, 74, 1), (5, 79, 1), (6, 74, 1), (7, 71, 1),
+    (8, 72, 1), (9, 76, 1), (10, 81, 1), (11, 79, 1),
+    (12, 77, 1), (13, 76, 0.5), (13.5, 74, 0.5), (14, 72, 2),
+]
+
+
+def pluck(freq, d, bright=1.0):
+    t = tvec(d)
+    y = (np.sin(2 * np.pi * freq * t) + 0.4 * bright * np.sin(4 * np.pi * freq * t)
+         + 0.15 * bright * np.sin(6 * np.pi * freq * t))
+    return y * adsr(len(t), 0.004, d * 0.35)
+
+
+def place(buf, x, t, g=1.0):
+    i = int(t * SR)
+    if i >= len(buf):
+        return
+    n = min(len(x), len(buf) - i)
+    buf[i:i + n] += x[:n] * g
+
+
+def make_music(total):
+    n = int(total * SR) + SR
+    normal = np.zeros(n)
+    dance = np.zeros(n)
+    soft = np.zeros(n)
+    bar = 4 * BEAT
+    nbars = int(total / bar) + 2
+    kick = None
+    t = tvec(0.25)
+    kick = np.sin(2 * np.pi * np.cumsum(120 * np.exp(-t * 20) + 45) / SR) * adsr(len(t), 0.001, 0.08)
+    shaker = bandnoise(0.05, 5000, 12000) * adsr(int(0.05 * SR), 0.003, 0.012)
+    clap = bandnoise(0.1, 900, 5000) * adsr(int(0.1 * SR), 0.001, 0.03)
+    for b in range(nbars):
+        root, chord = PROG[b % 4]
+        t0 = b * bar
+        # bass
+        for k in (0, 2):
+            x = pluck(note_freq(root), BEAT * 1.6, 0.3)
+            place(normal, x, t0 + k * BEAT, 0.30)
+            place(dance, x, t0 + k * BEAT, 0.34)
+        place(dance, pluck(note_freq(root + 12), BEAT * 0.8, 0.3),
+              t0 + 3.5 * BEAT, 0.25)
+        # off-beat chords (ukulele feel)
+        for k in (0.5, 1.5, 2.5, 3.5):
+            for m in chord:
+                x = pluck(note_freq(m), BEAT * 0.6, 0.8)
+                place(normal, x, t0 + k * BEAT, 0.07)
+                place(dance, x, t0 + k * BEAT, 0.08)
+        # soft pad chord for ending
+        for m in chord:
+            x = pluck(note_freq(m), bar * 1.1, 0.2)
+            place(soft, x, t0, 0.07)
+        # percussion
+        for k in range(8):
+            place(normal, shaker, t0 + k * BEAT / 2, 0.05 if k % 2 else 0.03)
+            place(dance, shaker, t0 + k * BEAT / 2, 0.08)
+        for k in (0, 2):
+            place(normal, kick, t0 + k * BEAT, 0.22)
+        for k in range(4):
+            place(dance, kick, t0 + k * BEAT, 0.4)
+        for k in (1, 3):
+            place(dance, clap, t0 + k * BEAT, 0.22)
+        # melody (4-bar phrase)
+        if b % 4 == 0:
+            for off, m, ln in MELODY:
+                x = bell(note_freq(m), ln * BEAT + 0.6, 0.45)
+                place(normal, x, t0 + off * BEAT, 0.09)
+                place(dance, x, t0 + off * BEAT, 0.12)
+                place(soft, bell(note_freq(m), ln * BEAT * 2 + 0.6, 0.6),
+                      t0 + off * BEAT * 2, 0.08)
+    return normal, dance, soft
+
+
+# ---------------------------------------------------------------- main
+def main():
+    if KM_ENGINE == "voxcpm":
+        vox_prepare()
+    scenes, voice_clips, total = build_timeline()
+    n = int(total * SR) + SR
+    voice = np.zeros(n)
+    fx = np.zeros(n)
+    for si, t, clip in voice_clips:
+        place(voice, clip, scenes[si]["start"] + t)
+
+    modes = []  # (global time, mode)
+    for si, s in enumerate(scenes):
+        g0 = s["start"]
+        if si > 0:
+            place(fx, sfx("whoosh"), g0 - 0.1, 1.0)
+        for e in s["events"]:
+            gt = g0 + e["t"]
+            if e["type"] == "sfx":
+                place(fx, sfx(e["args"][0]), gt)
+            elif e["type"] == "music":
+                modes.append((gt, e["args"][0]))
+            elif e["type"] == "walk":
+                who, _, d = e["args"][:3]
+                step = 0.2 if who == "run" else 0.34
+                k = 0
+                while k * step < d:
+                    place(fx, sfx("step"), gt + k * step)
+                    k += 1
+            elif e["type"] == "act" and e["args"][1] in ("run", "walk_in_place"):
+                d = e["args"][2]
+                step = 0.18 if e["args"][1] == "run" else 0.34
+                k = 0
+                while k * step < d:
+                    place(fx, sfx("step"), gt + k * step, 0.5)
+                    k += 1
+            elif e["type"] == "turn":
+                place(fx, sfx("pop"), gt, 0.6)
+
+    normal, dance, soft = make_music(total)
+    # mode weights over time
+    w = {"normal": np.ones(n), "dance": np.zeros(n), "soft": np.zeros(n)}
+    cur = "normal"
+    times = np.arange(n) / SR
+    target = np.zeros(n, dtype=int)
+    idx = {"normal": 0, "dance": 1, "soft": 2}
+    for gt, m in sorted(modes):
+        target[int(gt * SR):] = idx[m]
+    for k, name in enumerate(["normal", "dance", "soft"]):
+        raw = (target == k).astype(np.float32)
+        # 0.6 s smoothing
+        ker = int(0.6 * SR)
+        c = np.cumsum(np.concatenate([np.zeros(1), raw]))
+        sm = (c[ker:] - c[:-ker]) / ker
+        w[name] = np.concatenate([raw[:ker - 1] * 0 + raw[0], sm])[:n]
+    music = normal * w["normal"] + dance * w["dance"] * 1.25 + soft * w["soft"] * 1.6
+
+    # ducking under dialogue
+    hop = SR // 50
+    m = len(voice) // hop
+    lvl = np.abs(voice[:m * hop]).reshape(m, hop).max(axis=1)
+    act = (lvl > 0.02).astype(np.float32)
+    ker = 25
+    act = np.convolve(act, np.ones(ker) / ker, mode="same")
+    act = np.clip(act * 3, 0, 1)
+    duck = 1 - 0.5 * np.repeat(act, hop)
+    duck = np.concatenate([duck, np.ones(n - len(duck))])
+    music *= duck
+    # fade in / out
+    fi = int(1.0 * SR)
+    music[:fi] *= np.linspace(0, 1, fi)
+    fo = int(3.0 * SR)
+    end = int(total * SR)
+    music[end - fo:end] *= np.linspace(1, 0, fo)
+    music[end:] = 0
+
+    mix = voice * 0.9 + fx * 0.7 + music * 0.36
+    mix = mix[:end]
+    peak = np.abs(mix).max()
+    mix = mix / peak * 0.89
+    write_wav(os.path.join(BUILD, "final_audio.wav"), mix)
+
+    with open(os.path.join(BUILD, "timeline.json"), "w") as f:
+        ui = dict(cartoon_dsl.UI_DEFAULTS[LANGUAGE])
+        ui.update(getattr(SD, "UI", {}))
+        json.dump({"fps": FPS, "xfade": XFADE, "total": total, "language": LANGUAGE,
+                   "title": getattr(SD, "TITLE", "Episode"), "ui": ui,
+                   "scenes": scenes}, f)
+    for s in scenes:
+        print(f"{s['name']:14s} dur {s['dur']:6.1f}s  target {s['target']}s  "
+              f"start {s['start']:6.1f}")
+    print("TOTAL %.1f s (%.2f min)" % (total, total / 60))
+
+
+if __name__ == "__main__":
+    main()

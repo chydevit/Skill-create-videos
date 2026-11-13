@@ -1,0 +1,96 @@
+{
+  "lang": "km",
+  "translation": "en",
+  "voices": {
+    "benny": {
+      "seed": 2101,
+      "design": "A nervous, jittery Cambodian man in his thirties, short and chubby, slightly high-pitched shaky voice, speaks fast and anxiously",
+      "sample": "ខ្ញុំ... ខ្ញុំខ្លាចណាស់បង។ ប៉ូលិសមកហើយ! យើងត្រូវរត់ឥឡូវនេះ!",
+      "gain": 0.95,
+      "pan": 0
+    },
+    "marge": {
+      "seed": 2202,
+      "design": "A confident, sly Cambodian woman gang boss in her forties, low smooth smoky voice, calm, cool and commanding",
+      "sample": "ស្ងាត់សិន។ ធ្វើតាមខ្ញុំប្រាប់ ហើយអ្វីៗនឹងល្អ។ លុយនេះជារបស់យើង។",
+      "gain": 0.95,
+      "pan": 0
+    },
+    "speaker": {
+      "seed": 2303,
+      "design": "A bored young Cambodian fast-food worker talking through a drive-thru intercom, flat tired monotone voice",
+      "sample": "សូមស្វាគមន៍មកកាន់ហាងយើង។ សូមរង់ចាំបន្តិចបង។",
+      "gain": 0.75,
+      "pan": 0.35,
+      "fx": "intercom"
+    }
+  },
+  "lines": {
+    "v_benny_yelp": [
+      "benny",
+      "ម៉ែអើយ!",
+      "Oh, mother!"
+    ],
+    "v_marge_hitit": [
+      "marge",
+      "បើកទៅ។",
+      "Drive."
+    ],
+    "v_benny_reverse": [
+      "benny",
+      "អូ៎... ដាក់លេខខុស។",
+      "Oops... wrong gear."
+    ],
+    "v_marge_faster": [
+      "marge",
+      "លឿនទៀត បេននី!",
+      "Faster, Benny!"
+    ],
+    "v_benny_yelp2": [
+      "benny",
+      "អូយម៉ែ!",
+      "Yikes!"
+    ],
+    "v_marge_justdrive": [
+      "marge",
+      "បើកទៅចុះ!",
+      "Just drive already!"
+    ],
+    "v_speaker": [
+      "speaker",
+      "ប៊ឺហ្គឺបាន! កុម្ម៉ង់អ្វីដែរបង?",
+      "Burger Barn! What'll it be?"
+    ],
+    "v_benny_uh": [
+      "benny",
+      "អឺ... អឺ...",
+      "Uh... uh..."
+    ],
+    "v_benny_fries": [
+      "benny",
+      "ដំឡូងបំពងធំមួយ!",
+      "One large fries!"
+    ],
+    "v_marge_push": [
+      "marge",
+      "រុញទៅ!",
+      "Push!"
+    ],
+    "v_wheee": [
+      "benny",
+      "យេ៎! សប្បាយណាស់!",
+      "Yay! This is fun!"
+    ],
+    "v_woohoo": [
+      "marge",
+      "ហ៊ូរ៉េ!",
+      "Hooray!"
+    ],
+    "v_woohoo2": [
+      "benny",
+      "ហ៊ូរ៉េ! យើងរួចខ្លួនហើយ!",
+      "Hooray! We got away!"
+    ]
+  },
+  "seeds": {}
+}
