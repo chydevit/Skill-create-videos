@@ -1,0 +1,20 @@
+{
+  "name": "kumnit-saas",
+  "lang": "en",
+  "cards": [
+    "stills/*.jpg",
+    {"file": "explainer.mp4", "at": 20},
+    "pharmkulen.png"
+  ],
+  "logo": "logo.png",
+  "text": {
+    "typed": "KumNit.",
+    "bento": ["Animate", "Tell your story", "a first draft"],
+    "headline": "Make Your Brand Move Like a Story",
+    "sub": "Animation, explainers and AI video, made in Khmer and English",
+    "from": "From one idea",
+    "to": "To a Finished Film",
+    "labels": ["Write a scene…", "Storyboard", "Voices", "Render", "Khmer", "Music"]
+  },
+  "sfxDir": "~/Edit VD/1000+ Sound Design Asset/336 SFX/MIX"
+}

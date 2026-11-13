@@ -1,6 +1,6 @@
 #!/bin/bash
 # Install the skills in this repo for Claude Code: links each skill folder into ~/.claude/skills,
-# so /generate-logo, /brand-promo and /brand-loop work in every project. Run it again after `git pull` (links stay valid).
+# so /generate-logo, /brand-promo, /brand-loop, /saas-promo and /portfolio-reel work in every project. Run it again after `git pull` (links stay valid).
 #   ./install.sh            link (edits in this repo take effect immediately)
 #   ./install.sh --copy     copy instead of link
 #   ./install.sh --remove   uninstall
@@ -27,4 +27,6 @@ Done. Start a new Claude Code session and type:
   /generate-logo animate logo.png
   /brand-promo make a showreel from these 5 videos and my logo
   /brand-loop make a looping background in my logo's colours
+  /saas-promo make a SaaS promo from my screenshots
+  /portfolio-reel make an intro reel with my photo and my best clips
 MSG
