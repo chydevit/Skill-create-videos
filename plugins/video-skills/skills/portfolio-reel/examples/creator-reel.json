@@ -1,0 +1,26 @@
+{
+  "name": "alex-reel",
+  "lang": "en",
+  "avatar": {"file": "me.jpg"},
+  "text": {
+    "hook": ["Looking for a", "Video editor?"],
+    "badge": "Ideas, made visual",
+    "hello": "Hello, I'm Alex",
+    "roles": ["Video editor", "Motion designer", "Creative"],
+    "button": "Here's my work",
+    "cta": ["Let's turn that idea into visuals", "DM me, let's talk :)"]
+  },
+  "sections": [
+    {"title": "Short Form Edits", "clips": [{"file": "work/reel1.mp4", "at": 3}, "work/reel2.mp4", "work/reel3.mp4"]},
+    {"title": "Motion Graphics", "clips": ["work/logo-anim.mp4", "work/explainer.mp4"]},
+    {"title": "Personal Work", "clips": ["work/short.mp4", "work/film.mp4"]}
+  ],
+  "profile": {
+    "handle": "@alex",
+    "name": "Alex Doe",
+    "stats": [["Posts", 41], ["Followers", 150], ["Following", 67]],
+    "buttons": ["Follow", "Message"],
+    "clicked": "Following",
+    "back": "alex.studio"
+  }
+}
